@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+
+    <style name="BaseEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+
+        <item name="android:textColorHint">@color/grey</item>
+        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:background">@color/white_bright</item>
+
+
+    </style>
+</resources>

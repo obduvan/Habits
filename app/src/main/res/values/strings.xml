@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Habits</string>
+    <string name="habit_name">Name habit</string>
+    <string name="habit_description">Description</string>
+    <string name="repeats">Number of repeats</string>
+    <string name="habit_interval">Interval in days between executions</string>
+    <string name="priority">Priority</string>
+    <string name="habit_type">Type</string>
+    <string name="habit_type_good">Good</string>
+    <string name="habit_type_bad">Bad</string>
+    <string name="save">Save</string>
+
+    <string-array name="priorities">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
 </resources>
