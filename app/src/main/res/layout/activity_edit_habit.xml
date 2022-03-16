@@ -7,17 +7,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_bright"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
     tools:context=".ui.EditHabitActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp">
+        android:layout_marginHorizontal="20dp">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:hint="@string/habit_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -56,20 +60,20 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layout_count"
+            android:id="@+id/layout_count_repeats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layout_description">
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/count"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/count_repeats"
                 style="@style/BaseEditText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="@string/repeats"
                 android:inputType="number"
-                android:maxLength="40"
+                android:maxLength="9"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,17 +82,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_count">
+            app:layout_constraintTop_toBottomOf="@id/layout_count_repeats">
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/habit_interval"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/interval"
                 style="@style/BaseEditText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:hint="@string/habit_interval"
                 android:inputType="number"
-                android:maxLength="40"
+                android:maxLength="9"
                 android:maxLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -145,12 +149,14 @@
             app:layout_constraintTop_toBottomOf="@id/card_type">
 
             <RadioButton
+                android:id="@+id/good_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/habit_type_good" />
 
             <RadioButton
+                android:id="@+id/bad_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -159,13 +165,13 @@
 
         <Button
             android:id="@+id/button_save"
-            android:layout_width="150dp"
-            android:layout_height="0dp"
-            android:textAllCaps="false"
-            android:text="@string/save"
+            android:layout_width="180dp"
+            android:layout_height="55dp"
             android:layout_marginTop="50dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/save"
+            android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/card_type" />
 
         <!--        <HorizontalScrollView-->

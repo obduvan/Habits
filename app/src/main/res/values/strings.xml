@@ -6,9 +6,15 @@
     <string name="habit_interval">Interval in days between executions</string>
     <string name="priority">Priority</string>
     <string name="habit_type">Type</string>
+    <string name="day">&#160;day</string>
+
     <string name="habit_type_good">Good</string>
+    <string name="title_edit_habit">Your Habit</string>
     <string name="habit_type_bad">Bad</string>
     <string name="save">Save</string>
+    <string name="days">&#160;days</string>
+    <string name="create_new_habit">Create new habit</string>
+    <string name="interval">Interval:&#160;</string>
 
     <string-array name="priorities">
         <item>Low</item>

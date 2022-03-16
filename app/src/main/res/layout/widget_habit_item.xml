@@ -30,7 +30,6 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/roboto_regular"
             android:maxLength="25"
-            android:text="Моя привычка"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@id/color"
@@ -45,54 +44,79 @@
             android:fontFamily="@font/roboto_regular"
             android:maxLength="30"
             android:maxLines="1"
-            android:text="Описание Описание Описание"
             android:textColor="@color/dusty_grey"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/habit_name"
             app:layout_constraintTop_toBottomOf="@id/habit_name" />
 
         <TextView
-            android:id="@+id/habit_interval"
+            android:id="@+id/interval_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLength="40"
-            android:maxLines="1"
-            android:text="Interval: 5 days"
+            android:text="@string/interval"
             android:textColor="@color/dusty_grey"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/habit_description"
             app:layout_constraintTop_toBottomOf="@id/habit_description" />
 
         <TextView
+            android:id="@+id/interval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="40"
+            android:maxLines="1"
+            android:textColor="@color/dusty_grey"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/interval_name"
+            app:layout_constraintTop_toBottomOf="@id/habit_description" />
+
+        <TextView
+            android:id="@+id/days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/days"
+            android:textColor="@color/dusty_grey"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/interval"
+            app:layout_constraintTop_toBottomOf="@id/habit_description" />
+
+
+        <TextView
             android:id="@+id/habit_priority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="High priority"
-            android:textColor="@color/red"
+            android:layout_marginEnd="4dp"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@id/card_type"
-            app:layout_constraintStart_toStartOf="@id/card_type"
             app:layout_constraintTop_toTopOf="@id/habit_description" />
+
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/priority_string"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:textSize="14sp"-->
+        <!--            android:text="priority"-->
+        <!--            android:layout_marginHorizontal="5dp"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="@id/habit_description" />-->
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            app:cardBackgroundColor="@color/green_edge_water"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/habit_name"
             app:strokeWidth="0dp">
 
             <TextView
                 android:id="@+id/habit_text_type"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="2dp"
-                android:text="Good"
-                android:textColor="@color/mine_black"
                 android:textSize="14sp" />
 
         </com.google.android.material.card.MaterialCardView>
