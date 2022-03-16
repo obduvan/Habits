@@ -3,9 +3,9 @@ package com.example.habits.ui
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.MenuItem
 import android.widget.RadioButton
 import android.widget.Toast
@@ -15,21 +15,17 @@ import com.example.habits.databinding.ActivityEditHabitBinding
 import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitPriority
 import com.example.habits.model.HabitType
+import com.example.habits.ui.views.ColorWorker
 
 
 class EditHabitActivity : AppCompatActivity() {
 
+    private var colorWorker: ColorWorker? = null
     private lateinit var binding: ActivityEditHabitBinding
-//    private var name: TextInputEditText? = null
-//    private var description: String? = null
-//    private var count: Int? = null
-//    private var daysInterval: Int? = null
-//    private var habitPriority: HabitPriority? = null
-//    private var type: HabitType? = null
 
     private var position: Int = -1
     private var isNewHabit = position != -1
-
+    private var intentColor: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,13 +35,51 @@ class EditHabitActivity : AppCompatActivity() {
         title = getString(R.string.title_edit_habit)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.buttonSave.setOnClickListener {
-            onSaveButtonClicked()
-        }
+        binding.buttonSave.setOnClickListener { onSaveButtonClicked() }
 
         loadHabit()
+
+        colorWorker = ColorWorker(
+            binding.rvColor,
+            binding.rvBackground,
+            binding.selectedColor,
+            binding.grbColor,
+            binding.hsvColor,
+            intentColor
+        )
     }
 
+    private fun loadHabit() {
+        position = intent.getIntExtra(KEY_POSITION, position)
+
+        val habitModel = intent.getParcelableExtra<HabitModel>(KEY_HABIT)
+
+        if (habitModel != null) {
+            with(habitModel) {
+                binding.name.setText(name)
+                binding.description.setText(description)
+                binding.countRepeats.setText(countRepeats.toString())
+                binding.interval.setText(interval.toString())
+                intentColor = color
+                binding.selectedColor.background = ColorDrawable(color)
+                binding.prioritySpinner.setSelection(priority.ordinal)
+                (binding.types.getChildAt(type.ordinal) as RadioButton).isChecked = true
+            }
+        } else {
+            (binding.types.getChildAt(HabitType.Good.ordinal) as RadioButton).isChecked = true
+        }
+    }
+
+    private fun onSaveButtonClicked() {
+        val emptyEditText = getEmptyEditText()
+        val incorrectNumber = getIncorrectNumber()
+
+        when {
+            emptyEditText != null -> showToast("$emptyEditText is empty")
+            incorrectNumber != null -> showToast("$incorrectNumber is incorrect")
+            else -> saveHabit()
+        }
+    }
 
     private fun getEmptyEditText(): CharSequence? {
         return when (true) {
@@ -73,30 +107,21 @@ class EditHabitActivity : AppCompatActivity() {
         return text?.trim()?.isEmpty() ?: true
     }
 
-    private fun onSaveButtonClicked() {
-        val emptyEditText = getEmptyEditText()
-        val incorrectNumber = getIncorrectNumber()
-
-        when {
-            emptyEditText != null -> showToast("$emptyEditText is empty")
-            incorrectNumber != null -> showToast("$incorrectNumber is incorrect")
-            else -> saveHabit()
-        }
-    }
-
     private fun showToast(name: String) {
         Toast.makeText(this, name, Toast.LENGTH_SHORT).show()
     }
 
     private fun saveHabit() {
-        val bt = binding.types.checkedRadioButtonId
-        val r = findViewById<RadioButton>(bt).toString()
-        Log.e("das", r)
+        if (colorWorker == null) {
+            showToast("Color error")
+            return
+        }
+
         val habitModel = HabitModel(
             id = position,
             name = binding.name.text.toString(),
             description = binding.description.text.toString(),
-            color = Color.RED,
+            color = colorWorker?.getSelectedColor() ?: Color.WHITE,
             countRepeats = binding.countRepeats.text.toString().toInt(),
             interval = binding.interval.text.toString().toInt(),
             priority = HabitPriority.valueOf(binding.prioritySpinner.selectedItem.toString()),
@@ -118,24 +143,6 @@ class EditHabitActivity : AppCompatActivity() {
         return when (binding.types.checkedRadioButtonId) {
             R.id.good_type -> HabitType.Good
             else -> HabitType.Bad
-        }
-    }
-
-    private fun loadHabit() {
-        position = intent.getIntExtra(KEY_POSITION, position)
-        val habitModel = intent.getParcelableExtra<HabitModel>(KEY_HABIT)
-
-        if (habitModel != null) {
-            with(habitModel) {
-                binding.name.setText(name)
-                binding.description.setText(description)
-                binding.countRepeats.setText(countRepeats.toString())
-                binding.interval.setText(interval.toString())
-                binding.prioritySpinner.setSelection(priority.ordinal)
-                (binding.types.getChildAt(type.ordinal) as RadioButton).isChecked = true
-            }
-        } else {
-            (binding.types.getChildAt(HabitType.Good.ordinal) as RadioButton).isChecked = true
         }
     }
 

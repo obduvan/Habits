@@ -10,7 +10,6 @@ class App : Application() {
         fun getInstance(): Application? = instance
 
         fun getContext(): Context? = instance?.applicationContext
-
     }
 
     override fun onCreate() {

@@ -1,17 +1,16 @@
 package com.example.habits.ui
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.habits.R
+import com.example.habits.databinding.WidgetHabitItemBinding
 import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitPriority
 import com.example.habits.model.HabitType
-import com.example.habits.R
-import com.example.habits.databinding.WidgetHabitItemBinding
 import com.example.habits.utils.App
 
 

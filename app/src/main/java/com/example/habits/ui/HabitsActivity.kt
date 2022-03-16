@@ -3,12 +3,12 @@ package com.example.habits.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.HabitRepositoryTest
+import com.example.habits.OnHabitRepositoryListener
 import com.example.habits.databinding.ActivityHabitsBinding
 import com.example.habits.model.HabitModel
 
@@ -17,12 +17,12 @@ const val KEY_POSITION = "POSITION"
 const val KEY_HABIT = "HABIT"
 
 
-class HabitsActivity : AppCompatActivity(), OnHabitListener {
+class HabitsActivity : AppCompatActivity(), OnHabitListener, OnHabitRepositoryListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapterHabit: HabitAdapter
     private lateinit var binding: ActivityHabitsBinding
 
-    private val habitRepository = HabitRepositoryTest()
+    private val habitRepository = HabitRepositoryTest(this)
 
     private val getNewHabit =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -31,7 +31,6 @@ class HabitsActivity : AppCompatActivity(), OnHabitListener {
 
                 newHabitModel?.let { habit ->
                     habitRepository.addHabit(habit)
-                    adapterHabit.submitList(habitRepository.getHabits())
                     recyclerView.post { recyclerView.smoothScrollToPosition(0) }
                 }
             }
@@ -43,9 +42,8 @@ class HabitsActivity : AppCompatActivity(), OnHabitListener {
                 val habitModel = it.data?.getParcelableExtra<HabitModel>(KEY_HABIT)
                 val position = it.data?.getIntExtra(KEY_POSITION, -1) ?: -1
 
-                if (habitModel != null && position != -1) {
+                if (habitModel != null && position >= 0) {
                     habitRepository.changeHabit(position, habitModel)
-                    adapterHabit.submitList(habitRepository.getHabits())
                 }
             }
         }
@@ -66,10 +64,11 @@ class HabitsActivity : AppCompatActivity(), OnHabitListener {
             adapter = adapterHabit
         }
 
-        loadTestHabits(adapterHabit)
+
+        loadTestHabits()
     }
 
-    private fun loadTestHabits(adapterHabit: HabitAdapter) {
+    private fun loadTestHabits() {
         adapterHabit.submitList(habitRepository.getHabits())
     }
 
@@ -86,5 +85,9 @@ class HabitsActivity : AppCompatActivity(), OnHabitListener {
                 putExtra(KEY_HABIT, habitRepository.getHabit(position))
             }
         )
+    }
+
+    override fun habitsUpdate(newHabits: List<HabitModel>) {
+        adapterHabit.submitList(newHabits)
     }
 }
