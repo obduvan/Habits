@@ -61,7 +61,7 @@ class EditHabitActivity : AppCompatActivity() {
                 binding.countRepeats.setText(countRepeats.toString())
                 binding.interval.setText(interval.toString())
                 intentColor = color
-                binding.selectedColor.background = ColorDrawable(color)
+                binding.selectedColor.setCardBackgroundColor(color)
                 binding.prioritySpinner.setSelection(priority.ordinal)
                 (binding.types.getChildAt(type.ordinal) as RadioButton).isChecked = true
             }
