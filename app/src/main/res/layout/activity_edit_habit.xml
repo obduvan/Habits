@@ -16,15 +16,31 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp">
+       >
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp" />
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_name"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="@string/habit_name"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -40,11 +56,12 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_description"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:counterEnabled="true"
             app:counterMaxLength="200"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/layout_name">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -62,9 +79,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_count_repeats"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+
             app:layout_constraintTop_toBottomOf="@+id/layout_description">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -80,9 +99,10 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_interval"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/layout_count_repeats">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -99,9 +119,11 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <View
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:background="@drawable/grey_alto_edge"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintBottom_toBottomOf="@+id/priority_spinner"
             app:layout_constraintTop_toTopOf="@+id/priority_name" />
 
@@ -116,7 +138,7 @@
             android:text="@string/priority"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/layout_interval" />
 
         <androidx.appcompat.widget.AppCompatSpinner
@@ -126,19 +148,20 @@
             android:layout_height="50dp"
             android:entries="@array/priorities"
             android:popupBackground="@drawable/solid_white_edge"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
             app:layout_constraintTop_toTopOf="@id/priority_name" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/card_type"
-            android:layout_width="match_parent"
+            android:id="@+id/type_name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginVertical="20dp"
-            android:paddingHorizontal="8dp"
+            android:layout_marginHorizontal="8dp"
             android:text="@string/habit_type"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
             app:layout_constraintTop_toBottomOf="@id/priority_spinner" />
 
         <RadioGroup
@@ -146,9 +169,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingHorizontal="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/card_type">
+            android:layout_marginHorizontal="35dp"
+            app:layout_constraintStart_toStartOf="@id/type_name"
+            app:layout_constraintTop_toBottomOf="@id/type_name">
 
             <RadioButton
                 android:id="@+id/good_type"
@@ -169,9 +192,9 @@
             android:id="@+id/selected_color"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:elevation="0dp"
             android:layout_marginTop="5dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:elevation="0dp"
+            app:layout_constraintStart_toStartOf="@id/type_name"
             app:layout_constraintTop_toBottomOf="@id/types" />
 
         <TextView
@@ -206,8 +229,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_color"
                     android:layout_width="1440dp"
-                    android:layout_gravity="center_vertical"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:elevation="20dp"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="@id/rv_background"
@@ -216,9 +239,9 @@
 
                 <View
                     android:id="@+id/rv_background"
-                    android:elevation="0dp"
                     android:layout_width="1440dp"
-                    android:layout_height="110dp" />
+                    android:layout_height="110dp"
+                    android:elevation="0dp" />
 
             </FrameLayout>
 
@@ -229,9 +252,9 @@
             android:layout_width="180dp"
             android:layout_height="55dp"
             android:layout_marginTop="10dp"
-            android:textSize="16sp"
             android:text="@string/save"
             android:textAllCaps="false"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sv_colors" />
