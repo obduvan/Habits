@@ -1,6 +1,5 @@
-package com.example.habits.ui
+package com.example.habits.ui.views
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +7,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.R
-import com.example.habits.utils.App
 import com.google.android.material.card.MaterialCardView
 
 

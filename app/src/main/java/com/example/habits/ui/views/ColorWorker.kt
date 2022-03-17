@@ -1,14 +1,11 @@
 package com.example.habits.ui.views
 
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.habits.ui.ColorAdapter
-import com.example.habits.ui.OnColorListener
 import com.google.android.material.card.MaterialCardView
 
 class ColorWorker(
