@@ -14,10 +14,8 @@ interface OnColorListener {
     fun onColorClick(position: Int)
 }
 
-class ColorAdapter(_onColorListener: OnColorListener) :
+class ColorAdapter(private val onColorListener: OnColorListener) :
     ListAdapter<Int, ColorAdapter.ViewHolder>(ColorDiffCallBack()) {
-
-    private val onColorListener: OnColorListener = _onColorListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val colorView =
@@ -30,10 +28,9 @@ class ColorAdapter(_onColorListener: OnColorListener) :
         holder.bind(getItem(position))
     }
 
-    class ViewHolder(view: View, _onColorListener: OnColorListener) :
+    class ViewHolder(view: View, private val onColorListener: OnColorListener) :
         RecyclerView.ViewHolder(view) {
 
-        private val onColorListener: OnColorListener = _onColorListener
         private val colorBackground: MaterialCardView = view.findViewById(R.id.color_square)
 
         init {

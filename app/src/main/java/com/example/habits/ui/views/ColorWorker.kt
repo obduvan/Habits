@@ -14,12 +14,13 @@ class ColorWorker(
     private val selectedColorView: MaterialCardView,
     private val rgbText: TextView,
     private val hsvTextView: TextView,
-    intentColor: Int? = null
+    intentColor: Int? = null,
 ) :
     OnColorListener {
 
+    private val countElements = 16
     private val colorAdapter: ColorAdapter = ColorAdapter(this)
-    private var colors: List<Int> = (0..15).map {
+    private var colors: List<Int> = (0 until countElements).map {
         Color.HSVToColor(floatArrayOf(360f / 16f * (it + 1) - 360f / 16f / 2f, 0.9f, 1f))
 
     }
@@ -42,7 +43,7 @@ class ColorWorker(
     private fun getGradientBackground(): GradientDrawable {
         val colors = (0..360 step 60)
             .map { it.toFloat() }
-            .map { floatArrayOf(it,0.9f, 1f) }
+            .map { floatArrayOf(it, 0.9f, 1f) }
             .map { Color.HSVToColor(it) }
             .toIntArray()
 

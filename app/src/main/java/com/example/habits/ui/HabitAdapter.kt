@@ -11,17 +11,14 @@ import com.example.habits.databinding.WidgetHabitItemBinding
 import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitPriority
 import com.example.habits.model.HabitType
-import com.example.habits.utils.App
 
 
 interface OnHabitListener {
     fun onHabitClick(position: Int)
 }
 
-class HabitAdapter(_onHabitListener: OnHabitListener) :
+class HabitAdapter(private val onViewListener: OnHabitListener) :
     ListAdapter<HabitModel, HabitAdapter.ViewHolder>(HabitDiffCallBack()) {
-
-    private val onViewListener = _onHabitListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val habitBinding =
@@ -35,10 +32,8 @@ class HabitAdapter(_onHabitListener: OnHabitListener) :
     }
 
     class ViewHolder(
-        private val binding: WidgetHabitItemBinding, _onHabitListener: OnHabitListener
+        private val binding: WidgetHabitItemBinding, private val onHabitListener: OnHabitListener
     ) : RecyclerView.ViewHolder(binding.root) {
-
-        private val onHabitListener: OnHabitListener = _onHabitListener
 
         init {
             binding.root.setOnClickListener { onClick() }
@@ -61,16 +56,14 @@ class HabitAdapter(_onHabitListener: OnHabitListener) :
 
                 binding.habitPriority.setTextColor(colorPriority)
 
-                val context = App.getContext() ?: return
-
                 if (interval == 1) {
-                    binding.days.text = context.getString(R.string.day)
+                    binding.days.text = itemView.context.getString(R.string.day)
                 }
 
                 if (type == HabitType.Good) {
-                    binding.cardType.setCardBackgroundColor(context.getColor(R.color.green_edge_water))
+                    binding.cardType.setCardBackgroundColor(itemView.context.getColor(R.color.green_edge_water))
                 } else {
-                    binding.cardType.setCardBackgroundColor(context.getColor(R.color.pink_cavern))
+                    binding.cardType.setCardBackgroundColor(itemView.context.getColor(R.color.pink_cavern))
                 }
             }
         }
@@ -82,7 +75,7 @@ class HabitAdapter(_onHabitListener: OnHabitListener) :
 }
 
 
-class HabitDiffCallBack: DiffUtil.ItemCallback<HabitModel>() {
+class HabitDiffCallBack : DiffUtil.ItemCallback<HabitModel>() {
     override fun areItemsTheSame(oldItem: HabitModel, newItem: HabitModel): Boolean {
         return oldItem.id == newItem.id
     }

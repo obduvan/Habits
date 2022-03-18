@@ -240,7 +240,7 @@
                 <View
                     android:id="@+id/rv_background"
                     android:layout_width="1440dp"
-                    android:layout_height="110dp"
+                    android:layout_height="100dp"
                     android:elevation="0dp" />
 
             </FrameLayout>

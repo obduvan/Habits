@@ -56,6 +56,7 @@ class HabitsActivity : AppCompatActivity(), OnHabitListener, OnHabitRepositoryLi
         binding.fabCreateHabit.setOnClickListener { onCreateHabitClick() }
 
         adapterHabit = HabitAdapter(this)
+
         recyclerView = binding.habits
         recyclerView.setHasFixedSize(true)
 
