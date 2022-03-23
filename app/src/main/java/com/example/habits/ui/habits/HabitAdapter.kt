@@ -17,14 +17,14 @@ interface OnHabitListener {
     fun onHabitClick(position: Int)
 }
 
-class HabitAdapter(private val onViewListener: OnHabitListener) :
+class HabitAdapter(private val onHabitListener: OnHabitListener) :
     ListAdapter<HabitModel, HabitAdapter.ViewHolder>(HabitDiffCallBack()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val habitBinding =
             WidgetHabitItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return ViewHolder(habitBinding, onViewListener)
+        return ViewHolder(habitBinding, onHabitListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

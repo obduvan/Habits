@@ -1,17 +1,19 @@
 package com.example.habits
 
 import android.graphics.Color
+import android.os.Parcelable
+import android.text.BoringLayout
 import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitPriority
 import com.example.habits.model.HabitType
+import kotlinx.parcelize.Parcelize
 
 
-interface OnHabitRepositoryListener{
-    fun habitsUpdate(newHabits: List<HabitModel>)
+interface OnHabitRepositoryListener {
+    fun habitsUpdate(newHabits: List<HabitModel>, isScrollUp: Boolean)
 }
 
 class HabitRepositoryTest(private val habitsUpdateListener: OnHabitRepositoryListener) {
-
     private var habitsList: MutableList<HabitModel>
 
     init {
@@ -23,14 +25,11 @@ class HabitRepositoryTest(private val habitsUpdateListener: OnHabitRepositoryLis
 
     fun getHabit(position: Int) = habitsList[position]
 
-    fun addHabit(position: Int, habitModel: HabitModel) {
-        habitsList = ArrayList(habitsList)
-        habitsList.add(position, habitModel)
 
-        invokeListener()
-    }
-
-    fun changeHabit(position: Int, habitModel: HabitModel) {
+    fun changeHabit(position: Int, habitModel: HabitModel?) {
+        if (!isValidPosition(position) || habitModel == null) {
+            return
+        }
         habitsList = ArrayList(habitsList)
         habitsList[position] = habitModel
 
@@ -38,21 +37,31 @@ class HabitRepositoryTest(private val habitsUpdateListener: OnHabitRepositoryLis
     }
 
     fun deleteHabit(position: Int) {
+        if (!isValidPosition(position)) {
+            return
+        }
         habitsList = ArrayList(habitsList)
         habitsList.removeAt(position)
 
         invokeListener()
     }
 
-    fun addHabit(habitModel: HabitModel) {
+    fun addHabit(habitModel: HabitModel?) {
+        if (habitModel == null) {
+            return
+        }
         habitsList = ArrayList(habitsList)
         habitsList.add(0, habitModel)
 
-        invokeListener()
+        invokeListener(isScrollUp = true)
     }
 
-    private fun invokeListener(){
-        habitsUpdateListener.habitsUpdate(habitsList)
+    private fun invokeListener(isScrollUp: Boolean = false) {
+        habitsUpdateListener.habitsUpdate(habitsList, isScrollUp)
+    }
+
+    private fun isValidPosition(position: Int): Boolean {
+        return position in 0 until habitsList.size
     }
 
     private fun getRandomHabits(): MutableList<HabitModel> {

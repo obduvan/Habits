@@ -1,42 +1,59 @@
-package com.example.habits.ui
+package com.example.habits.ui.editHabit
 
-import android.app.Activity
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
-import android.view.MenuItem
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.habits.R
-import com.example.habits.databinding.ActivityEditHabitBinding
+import com.example.habits.databinding.FramentEditHabitBinding
 import com.example.habits.model.HabitModel
+import com.example.habits.model.HabitOperation
 import com.example.habits.model.HabitPriority
 import com.example.habits.model.HabitType
-import com.example.habits.ui.views.ColorWorker
 
+import com.example.habits.ui.editHabit.views.ColorWorker
+import com.example.habits.ui.habits.KEY_HABIT
+import com.example.habits.ui.habits.KEY_HABIT_OPERATION
+import com.example.habits.ui.habits.KEY_POSITION
 
-class EditHabitActivity : AppCompatActivity() {
+class EditHabitFragment : Fragment() {
+
+    private var _binding: FramentEditHabitBinding? = null
+    private val binding
+        get() = _binding ?: throw IllegalStateException(
+            "Binding is only valid between onCreateView and onDestroyView."
+        )
 
     private var colorWorker: ColorWorker? = null
-    private lateinit var binding: ActivityEditHabitBinding
 
     private var position: Int = -1
-    private var isNewHabit = position != -1
     private var intentColor: Int? = null
+    private var firstSelectedType: HabitType? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FramentEditHabitBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        binding = ActivityEditHabitBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        title = getString(R.string.title_edit_habit)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        position = arguments?.getInt(KEY_POSITION, position) ?: position
+        val habitModel = arguments?.getParcelable<HabitModel>(KEY_HABIT)
+        loadHabit(habitModel)
 
         binding.buttonSave.setOnClickListener { onSaveButtonClicked() }
-
-        loadHabit()
 
         colorWorker = ColorWorker(
             binding.rvColor,
@@ -44,23 +61,21 @@ class EditHabitActivity : AppCompatActivity() {
             binding.selectedColor,
             binding.grbColor,
             binding.hsvColor,
-            intentColor
+            intentColor,
         )
     }
 
-    private fun loadHabit() {
-        position = intent.getIntExtra(KEY_POSITION, position)
-
-        val habitModel = intent.getParcelableExtra<HabitModel>(KEY_HABIT)
+    private fun loadHabit(habitModel: HabitModel?) {
 
         if (habitModel != null) {
             with(habitModel) {
+                intentColor = color
                 binding.name.setText(name)
                 binding.description.setText(description)
                 binding.countRepeats.setText(countRepeats.toString())
                 binding.interval.setText(interval.toString())
-                intentColor = color
                 binding.selectedColor.setCardBackgroundColor(color)
+                firstSelectedType = type
                 binding.prioritySpinner.setSelection(priority.ordinal)
                 (binding.types.getChildAt(type.ordinal) as RadioButton).isChecked = true
             }
@@ -107,7 +122,7 @@ class EditHabitActivity : AppCompatActivity() {
     }
 
     private fun showToast(name: String) {
-        Toast.makeText(this, name, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), name, Toast.LENGTH_SHORT).show()
     }
 
     private fun saveHabit() {
@@ -127,15 +142,43 @@ class EditHabitActivity : AppCompatActivity() {
             type = getSelectedType(),
         )
 
-        val intent = Intent().apply {
-            putExtra(KEY_HABIT, habitModel)
-        }
-        if (!isNewHabit) {
-            intent.putExtra(KEY_POSITION, position)
+        sendFragmentResult(habitModel)
+    }
+
+    private fun sendFragmentResult(habitModel: HabitModel?) {
+        val selectedType = getSelectedType()
+        val keyResult1 = selectedType
+        val operation1: HabitOperation
+        var operation2: HabitOperation? = null
+        val keyResult2 = firstSelectedType
+
+
+        when (firstSelectedType) {
+            null -> operation1 = HabitOperation.Add
+            selectedType -> operation1 = HabitOperation.Change
+            else -> {
+                operation1 = HabitOperation.Add
+                operation2 = HabitOperation.Delete
+            }
         }
 
-        setResult(Activity.RESULT_OK, intent)
-        finish()
+        val bundle = bundleOf(
+            KEY_HABIT to habitModel,
+            KEY_HABIT_OPERATION to operation1,
+            KEY_POSITION to position
+        )
+
+        if (operation2 != null && keyResult2 != null) {
+            val bundle2 = bundleOf(
+                KEY_HABIT to habitModel,
+                KEY_HABIT_OPERATION to operation2,
+                KEY_POSITION to position
+            )
+            parentFragmentManager.setFragmentResult(keyResult2.name, bundle2)
+        }
+
+        parentFragmentManager.setFragmentResult(keyResult1.name, bundle)
+        findNavController().popBackStack()
     }
 
     private fun getSelectedType(): HabitType {
@@ -145,13 +188,8 @@ class EditHabitActivity : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home -> {
-                finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

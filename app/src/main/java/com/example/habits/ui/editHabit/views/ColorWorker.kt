@@ -1,4 +1,4 @@
-package com.example.habits.ui.views
+package com.example.habits.ui.editHabit.views
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
@@ -18,7 +18,12 @@ class ColorWorker(
 ) :
     OnColorListener {
 
-    private val countElements = 16
+    companion object {
+        private const val countElements = 16
+        private const val saturation = 0.9f
+        private const val brightness = 1f
+    }
+
     private val colorAdapter: ColorAdapter = ColorAdapter(this)
     private var colors: List<Int> = (0 until countElements).map {
         Color.HSVToColor(floatArrayOf(360f / 16f * (it + 1) - 360f / 16f / 2f, 0.9f, 1f))
@@ -43,7 +48,7 @@ class ColorWorker(
     private fun getGradientBackground(): GradientDrawable {
         val colors = (0..360 step 60)
             .map { it.toFloat() }
-            .map { floatArrayOf(it, 0.9f, 1f) }
+            .map { floatArrayOf(it, saturation, brightness) }
             .map { Color.HSVToColor(it) }
             .toIntArray()
 
@@ -52,7 +57,6 @@ class ColorWorker(
 
     override fun onColorClick(position: Int) {
         selectedColor = colors[position]
-
         setColorInfo(selectedColor)
     }
 
