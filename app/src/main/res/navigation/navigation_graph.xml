@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_pager_habits">
         <action
             android:id="@+id/action_navigation_habits_to_navigation_edit_habit"
-            app:destination="@id/navigatio_edit_habit" />
+            app:destination="@id/navigation_edit_habit" />
     </fragment>
 
 
@@ -24,7 +24,7 @@
 
 
     <fragment
-        android:id="@+id/navigatio_edit_habit"
+        android:id="@+id/navigation_edit_habit"
         android:name="com.example.habits.ui.editHabit.EditHabitFragment"
         android:label="Your habit"
         tools:layout="@layout/frament_edit_habit" />
