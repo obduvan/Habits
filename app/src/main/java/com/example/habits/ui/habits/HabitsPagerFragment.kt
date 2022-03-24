@@ -35,7 +35,7 @@ class HabitsPagerFragment : Fragment() {
 
         val adapter = PagerHabitsAdapter(this)
         val viewPager = binding.viewPager
-        viewPager.offscreenPageLimit = 2
+        viewPager.offscreenPageLimit = 1
         viewPager.adapter = adapter
         binding.fabCreateHabit.setOnClickListener { onCreateHabitClick() }
 
