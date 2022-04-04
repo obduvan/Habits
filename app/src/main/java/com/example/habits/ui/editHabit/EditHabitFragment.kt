@@ -8,24 +8,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.core.os.bundleOf
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.habits.R
-import com.example.habits.databinding.FramentEditHabitBinding
+import com.example.habits.databinding.FragmentEditHabitBinding
+
 import com.example.habits.model.HabitModel
-import com.example.habits.model.HabitOperation
 import com.example.habits.model.HabitPriority
 import com.example.habits.model.HabitType
 
 import com.example.habits.ui.editHabit.views.ColorWorker
-import com.example.habits.ui.habits.KEY_HABIT
-import com.example.habits.ui.habits.KEY_HABIT_OPERATION
 import com.example.habits.ui.habits.KEY_POSITION
 
 class EditHabitFragment : Fragment() {
 
-    private var _binding: FramentEditHabitBinding? = null
+    private var _binding: FragmentEditHabitBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException(
             "Binding is only valid between onCreateView and onDestroyView."
@@ -35,14 +34,17 @@ class EditHabitFragment : Fragment() {
 
     private var position: Int = -1
     private var intentColor: Int? = null
-    private var firstSelectedType: HabitType? = null
+
+    private val viewModel12: EditHabitViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FramentEditHabitBinding.inflate(inflater, container, false)
+        _binding = FragmentEditHabitBinding.inflate(inflater, container, false)
+//        binding.lifecycleOwner = this
+//        binding.viewModel1 = viewModel12
         return binding.root
     }
 
@@ -50,8 +52,7 @@ class EditHabitFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         position = arguments?.getInt(KEY_POSITION, position) ?: position
-        val habitModel = arguments?.getParcelable<HabitModel>(KEY_HABIT)
-        loadHabit(habitModel)
+        loadHabit(position)
 
         binding.buttonSave.setOnClickListener { onSaveButtonClicked() }
 
@@ -65,22 +66,23 @@ class EditHabitFragment : Fragment() {
         )
     }
 
-    private fun loadHabit(habitModel: HabitModel?) {
+    private fun loadHabit(id: Int) {
+
+       val habitModel = viewModel12.loadHabit(id)
 
         if (habitModel != null) {
             with(habitModel) {
                 intentColor = color
-                binding.name.setText(name)
+//                binding.name.setText(name)
                 binding.description.setText(description)
                 binding.countRepeats.setText(countRepeats.toString())
                 binding.interval.setText(interval.toString())
                 binding.selectedColor.setCardBackgroundColor(color)
-                firstSelectedType = type
                 binding.prioritySpinner.setSelection(priority.ordinal)
                 (binding.types.getChildAt(type.ordinal) as RadioButton).isChecked = true
             }
         } else {
-            (binding.types.getChildAt(HabitType.Good.ordinal) as RadioButton).isChecked = true
+            (binding.types.getChildAt(HabitType.GOOD.ordinal) as RadioButton).isChecked = true
         }
     }
 
@@ -98,7 +100,6 @@ class EditHabitFragment : Fragment() {
     private fun getEmptyEditText(): CharSequence? {
         return when (true) {
             isEmptyText(binding.name.text) -> binding.name.hint
-            isEmptyText(binding.description.text) -> binding.description.hint
             isEmptyText(binding.countRepeats.text) -> binding.countRepeats.hint
             isEmptyText(binding.interval.text) -> binding.interval.hint
             else -> null
@@ -142,49 +143,15 @@ class EditHabitFragment : Fragment() {
             type = getSelectedType(),
         )
 
-        sendFragmentResult(habitModel)
-    }
-
-    private fun sendFragmentResult(habitModel: HabitModel?) {
-        val selectedType = getSelectedType()
-        val keyResult1 = selectedType
-        val operation1: HabitOperation
-        var operation2: HabitOperation? = null
-        val keyResult2 = firstSelectedType
-
-
-        when (firstSelectedType) {
-            null -> operation1 = HabitOperation.Add
-            selectedType -> operation1 = HabitOperation.Change
-            else -> {
-                operation1 = HabitOperation.Add
-                operation2 = HabitOperation.Delete
-            }
-        }
-
-        val bundle = bundleOf(
-            KEY_HABIT to habitModel,
-            KEY_HABIT_OPERATION to operation1,
-            KEY_POSITION to position
-        )
-
-        if (operation2 != null && keyResult2 != null) {
-            val bundle2 = bundleOf(
-                KEY_HABIT to habitModel,
-                KEY_HABIT_OPERATION to operation2,
-                KEY_POSITION to position
-            )
-            parentFragmentManager.setFragmentResult(keyResult2.name, bundle2)
-        }
-
-        parentFragmentManager.setFragmentResult(keyResult1.name, bundle)
+        viewModel12.saveHabit(position, habitModel)
         findNavController().popBackStack()
     }
 
+
     private fun getSelectedType(): HabitType {
         return when (binding.types.checkedRadioButtonId) {
-            R.id.good_type -> HabitType.Good
-            else -> HabitType.Bad
+            R.id.good_type -> HabitType.GOOD
+            else -> HabitType.BAD
         }
     }
 

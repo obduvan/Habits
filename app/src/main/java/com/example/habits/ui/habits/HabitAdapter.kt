@@ -1,8 +1,10 @@
-package com.example.habits.ui
+package com.example.habits.ui.habits
 
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +20,9 @@ interface OnHabitListener {
 }
 
 class HabitAdapter(private val onHabitListener: OnHabitListener) :
-    ListAdapter<HabitModel, HabitAdapter.ViewHolder>(HabitDiffCallBack()) {
+    ListAdapter<HabitModel, HabitAdapter.ViewHolder>(
+        AsyncDifferConfig.Builder(HabitDiffCallBack()).build()
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val habitBinding =
@@ -45,7 +49,7 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
                 binding.habitDescription.text = description
                 binding.habitName.text = name
                 binding.habitPriority.text = priority.name
-                binding.habitTextType.text = type.name
+                binding.habitTextType.text = itemView.context.getString(type.resourceId)
                 binding.interval.text = interval.toString()
 
                 val colorPriority = when (priority) {
@@ -60,7 +64,7 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
                     binding.days.text = itemView.context.getString(R.string.day)
                 }
 
-                if (type == HabitType.Good) {
+                if (type == HabitType.GOOD) {
                     binding.cardType.setCardBackgroundColor(itemView.context.getColor(R.color.green_edge_water))
                 } else {
                     binding.cardType.setCardBackgroundColor(itemView.context.getColor(R.color.pink_cavern))
@@ -84,3 +88,4 @@ class HabitDiffCallBack : DiffUtil.ItemCallback<HabitModel>() {
         return oldItem == newItem
     }
 }
+

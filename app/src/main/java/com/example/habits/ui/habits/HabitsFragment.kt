@@ -1,37 +1,37 @@
 package com.example.habits.ui.habits
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.habits.HabitRepositoryTest
-import com.example.habits.OnHabitRepositoryListener
 import com.example.habits.R
 import com.example.habits.databinding.FragmentHabitsBinding
-import com.example.habits.model.HabitModel
-import com.example.habits.model.HabitOperation
 import com.example.habits.model.HabitType
-import com.example.habits.ui.HabitAdapter
-import com.example.habits.ui.OnHabitListener
 
 
 const val KEY_POSITION = "POSITION"
-const val KEY_HABIT = "HABIT"
-const val KEY_HABIT_OPERATION = "HABIT_OPERATION"
+//const val KEY_HABIT = "HABIT"
+//const val KEY_HABIT_OPERATION = "HABIT_OPERATION"
 
 
-class HabitsFragment : Fragment(), OnHabitListener, OnHabitRepositoryListener {
+class HabitsFragment : Fragment(), OnHabitListener {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapterHabit: HabitAdapter
-    private var habitRepository = HabitRepositoryTest(this)
+//    private var habitRepository = HabitRepositoryTest(this)
+
+    private val viewModel: HabitsViewModel by viewModels ()
+
 
     private var _binding: FragmentHabitsBinding? = null
     private val baseFragmentManager get() = parentFragment?.parentFragmentManager
+    private var habitType: HabitType? =  null
     private val binding
         get() = _binding ?: throw IllegalStateException(
             "Binding is only valid between onCreateView and onDestroyView."
@@ -50,14 +50,14 @@ class HabitsFragment : Fragment(), OnHabitListener, OnHabitRepositoryListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val typeHabits = arguments?.get(KEY_TYPE_HABITS) as? HabitType ?: return
-
-        baseFragmentManager?.setFragmentResultListener(typeHabits.name, this) { _, bundle ->
-            val habitModel = bundle.getParcelable<HabitModel>(KEY_HABIT)
-            val position = bundle.getInt(KEY_POSITION, -1)
-            val habitOperation = bundle.get(KEY_HABIT_OPERATION) as? HabitOperation
-            executeHabitOperation(habitOperation, position, habitModel)
-        }
+//        val typeHabits = arguments?.get(KEY_TYPE_HABITS) as? HabitType ?: return
+//
+//        baseFragmentManager?.setFragmentResultListener(typeHabits.name, this) { _, bundle ->
+//            val habitModel = bundle.getParcelable<HabitModel>(KEY_HABIT)
+//            val position = bundle.getInt(KEY_POSITION, -1)
+//            val habitOperation = bundle.get(KEY_HABIT_OPERATION) as? HabitOperation
+//            executeHabitOperation(habitOperation, position, habitModel)
+//        }
     }
 
     override fun onCreateView(
@@ -65,7 +65,11 @@ class HabitsFragment : Fragment(), OnHabitListener, OnHabitRepositoryListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        habitType = arguments?.get(KEY_TYPE_HABITS) as? HabitType
+
         _binding = FragmentHabitsBinding.inflate(inflater, container, false)
+
+
         return binding.root
     }
 
@@ -82,38 +86,39 @@ class HabitsFragment : Fragment(), OnHabitListener, OnHabitRepositoryListener {
             adapter = adapterHabit
         }
 
-        loadTestHabits()
-    }
-
-    private fun loadTestHabits() {
-        adapterHabit.submitList(habitRepository.getHabits())
-    }
-
-    private fun executeHabitOperation(
-        habitOperation: HabitOperation?, position: Int, habit: HabitModel?
-    ) {
-        when (habitOperation) {
-            HabitOperation.Delete -> habitRepository.deleteHabit(position)
-            HabitOperation.Add -> habitRepository.addHabit(habit)
-            HabitOperation.Change -> habitRepository.changeHabit(position, habit)
+        viewModel.getHabits(habitType).observe(viewLifecycleOwner){ habits ->
+            adapterHabit.submitList(habits)
+            Log.e("dsa", habitType?.name ?: "")
         }
+
+//        loadTestHabits()
     }
 
-    override fun habitsUpdate(newHabits: List<HabitModel>, isScrollUp: Boolean) {
-        adapterHabit.submitList(newHabits)
-        if (isScrollUp) {
-            recyclerView.smoothScrollToPosition(0)
-        }
-    }
+//    private fun loadTestHabits() {
+//        adapterHabit.submitList(habitRepository.getHabits())
+//    }
+//
+//    private fun executeHabitOperation(
+//        habitOperation: HabitOperation?, position: Int, habit: HabitModel?
+//    ) {
+//        when (habitOperation) {
+//            HabitOperation.Delete -> habitRepository.deleteHabit(position)
+//            HabitOperation.Add -> habitRepository.addHabit(habit)
+//            HabitOperation.Change -> habitRepository.changeHabit(position, habit)
+//        }
+//    }
+
+//    override fun habitsUpdate(newHabits: List<HabitModel>, isScrollUp: Boolean) {
+//        adapterHabit.submitList(newHabits)
+//        if (isScrollUp) {
+//            recyclerView.smoothScrollToPosition(0)
+//        }
+//    }
 
     override fun onHabitClick(position: Int) {
-        val bundle = bundleOf(
-            KEY_POSITION to position,
-            KEY_HABIT to habitRepository.getHabit(position),
-        )
         findNavController().navigate(
             R.id.action_navigation_habits_to_navigation_edit_habit,
-            bundle
+            bundleOf(KEY_POSITION to position)
         )
     }
 

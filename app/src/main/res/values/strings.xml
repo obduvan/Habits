@@ -19,6 +19,9 @@
     <string name="open_drawer">open</string>
     <string name="menu_item_habits">Habits</string>
     <string name="menu_item_about">About</string>
+    <string name="bottom_sheet_title">Search and Filters</string>
+    <string name="sort_by_name_title">Sort by name</string>
+    <string name="search_by_name_title">Search by name</string>
 
     <string-array name="priorities">
         <item>Low</item>

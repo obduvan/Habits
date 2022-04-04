@@ -27,6 +27,6 @@
         android:id="@+id/navigation_edit_habit"
         android:name="com.example.habits.ui.editHabit.EditHabitFragment"
         android:label="Your habit"
-        tools:layout="@layout/frament_edit_habit" />
+        tools:layout="@layout/fragment_edit_habit" />
 
 </navigation>
