@@ -1,47 +1,101 @@
 package com.example.habits.ui.editHabit
 
+import android.content.Context
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.habits.HabitRepositoryTest
 import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitPriority
 import com.example.habits.model.HabitType
+import com.example.habits.utils.enumValueOfOrNull
 
-class EditHabitViewModel : ViewModel() {
-
+class EditHabitViewModel(private val habitId: Int) : ViewModel() {
     private var repositoryTest = HabitRepositoryTest
 
-    var name: String = "3213"
-    var name1: String = "3213111111"
-    var description = ""
-    var color = 0
-    var countRepeats = 0
-    var interval = 0
-
-    var type: HabitType? = null
-    var priority: HabitPriority? = null
     var habitModel: HabitModel? = null
 
+    var habitLiveData = MutableLiveData<HabitModel>()
 
-    fun loadHabit(id: Int): HabitModel? {
-        val habitModel= repositoryTest.getHabit(id)
-        name = habitModel?.name ?: "111"
 
-//        habitModel?.let {
-//            name = it.name
-//            description = it.description
-//            color = it.color
-//            countRepeats = it.countRepeats
-//            interval =
-//        }
+    init {
+        habitModel = repositoryTest.getHabit(habitId)?.copy()
 
-//        if (habitModel != null){
-//
-//                color = color
-//            }
-//        }
+        Log.e("sda", habitModel?.name ?: "")
+        Log.e("sda", habitId.toString())
+    }
 
-        return habitModel
 
+    var name = ""
+        set(value) {
+            habitModel?.name = value
+            field = value
+            Log.e("name",value)
+        }
+        get() {
+            return  field
+        }
+
+    var description = ""
+        set(value) {
+            habitModel?.description = value
+            field = value
+        }
+        get() {
+            return  field
+        }
+
+    var color: Int? = null
+        set(value) {
+            value?.let { habitModel?.color = it }
+            field = value
+        }
+        get() {
+            return field
+        }
+
+
+    var countRepeats = ""
+        set(value) {
+            habitModel?.countRepeats = value.toIntOrNull() ?: 0
+            field = value
+        }
+        get() {
+            return field
+        }
+
+    var interval = ""
+        set(value) {
+            habitModel?.interval = value.toIntOrNull() ?: 0
+            field = value
+        }
+        get() {
+            return  field
+        }
+
+    var typePosition = 0
+        set(value) {
+            habitModel?.type = HabitType.values()[value]
+            field = value
+        }
+        get() {
+            return field
+        }
+
+
+    var priorityPosition = 0
+        set(value) {
+            habitModel?.priority = HabitPriority.values()[value]
+            field = value
+        }
+        get() {
+            return field
+        }
+
+
+    fun loadHabit(id: Int) {
 
     }
 
@@ -52,4 +106,19 @@ class EditHabitViewModel : ViewModel() {
             repositoryTest.updateHabit(id, habitModel)
         }
     }
+}
+
+
+class ViewModelFactory(private val HabitId: Int) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        val viewModel = when (modelClass) {
+            EditHabitViewModel::class.java -> {
+                EditHabitViewModel(HabitId)
+            }
+            else -> throw IllegalStateException("Unknown ViewModel class")
+        }
+        return viewModel as T
+    }
+
 }

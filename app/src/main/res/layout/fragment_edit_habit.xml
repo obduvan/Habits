@@ -2,15 +2,15 @@
 
 
 
-<!--    <data>-->
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
 
-<!--        <variable-->
-<!--            name="viewModel1"-->
-<!--            type="com.example.habits.ui.editHabit.EditHabitViewModel" />-->
-<!--    </data>-->
+        <variable
+            name="viewModel"
+            type="com.example.habits.ui.editHabit.EditHabitViewModel" />
+    </data>
 
     <ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         tools:context=".ui.editHabit.EditHabitFragment"
@@ -46,7 +46,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:hint="@string/habit_name"
-                android:text="@{viewModel1.name1}"
                 app:layout_constraintEnd_toEndOf="@id/guideline_right"
                 app:layout_constraintStart_toStartOf="@id/guideline_left"
                 app:layout_constraintTop_toTopOf="parent">
@@ -57,9 +56,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:inputType="text"
+                    android:text="@={viewModel.name}"
                     android:maxLength="40"
-                    android:maxLines="1"
-                    android:text="@{viewModel.name1}" />
+                    android:maxLines="1"/>
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -79,6 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:text="@={viewModel.description}"
                     android:gravity="top"
                     android:hint="@string/habit_description"
                     android:inputType="textMultiLine"
@@ -102,6 +102,8 @@
                     android:layout_height="50dp"
                     android:hint="@string/repeats"
                     android:inputType="number"
+                    android:text="@={viewModel.countRepeats}"
+
                     android:maxLength="9"
                     android:textSize="14sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -120,6 +122,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="10dp"
+                    android:text="@={viewModel.interval}"
+
                     android:hint="@string/habit_interval"
                     android:inputType="number"
                     android:maxLength="9"
@@ -154,6 +158,7 @@
                 android:id="@+id/priority_spinner"
                 style="?attr/spinnerDropDownItemStyle"
                 android:layout_width="wrap_content"
+                android:selectedItemPosition="@={viewModel.priorityPosition}"
                 android:layout_height="50dp"
                 android:entries="@array/priorities"
                 android:popupBackground="@drawable/solid_white_edge"
@@ -179,10 +184,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="35dp"
                 android:orientation="horizontal"
+                android:checkedButton="@={viewModel.typePosition}"
                 app:layout_constraintStart_toStartOf="@id/type_name"
                 app:layout_constraintTop_toBottomOf="@id/type_name">
 
                 <RadioButton
+
                     android:id="@+id/good_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -196,6 +203,7 @@
                     android:layout_weight="1"
                     android:text="@string/habit_type_bad" />
             </RadioGroup>
+
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/selected_color"
@@ -272,3 +280,4 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+</layout>
