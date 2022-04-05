@@ -1,9 +1,9 @@
 package com.example.habits.ui.habits
 
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Filter
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -16,7 +16,7 @@ import com.example.habits.model.HabitType
 
 
 interface OnHabitListener {
-    fun onHabitClick(position: Int)
+    fun onHabitClick(position: Int?)
 }
 
 class HabitAdapter(private val onHabitListener: OnHabitListener) :
@@ -27,7 +27,6 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val habitBinding =
             WidgetHabitItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-
         return ViewHolder(habitBinding, onHabitListener)
     }
 
@@ -39,12 +38,14 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
         private val binding: WidgetHabitItemBinding, private val onHabitListener: OnHabitListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        private var idHabit: Int? = null
         init {
             binding.root.setOnClickListener { onClick() }
         }
 
         fun bind(habitModel: HabitModel) {
             with(habitModel) {
+                idHabit = id
                 binding.color.setBackgroundColor(color)
                 binding.habitDescription.text = description
                 binding.habitName.text = name
@@ -73,7 +74,8 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
         }
 
         private fun onClick() {
-            onHabitListener.onHabitClick(adapterPosition)
+            Log.e("das", idHabit.toString())
+            onHabitListener.onHabitClick(idHabit)
         }
     }
 }

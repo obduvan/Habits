@@ -16,34 +16,39 @@ object HabitRepositoryTest {
 
     fun getHabits(): List<HabitModel> = habitsList
 
-    fun getHabit(position: Int): HabitModel? {
-        if (position in 0 until habitsList.size){
-            return habitsList[position]
+    fun getHabits(type: HabitType) = habitsList.filter { it.type == type }
+
+
+    fun getHabit(id: Int): HabitModel? {
+        if (isValidPosition(id)) {
+            return habitsList.find { it.id == id }
         }
         return null
     }
 
-
-    fun updateHabit(position: Int, habitModel: HabitModel?) {
-        if (!isValidPosition(position) || habitModel == null) {
+    fun updateHabit(id: Int, habitModel: HabitModel?) {
+        if (!isValidPosition(id) || habitModel == null) {
             return
         }
         habitsList = ArrayList(habitsList)
+
+        val position = habitsList.indexOfFirst { it.id == id }
         habitsList[position] = habitModel
     }
 
-    fun deleteHabit(position: Int) {
-        if (!isValidPosition(position)) {
+    fun deleteHabit(id: Int) {
+        if (!isValidPosition(id)) {
             return
         }
         habitsList = ArrayList(habitsList)
-        habitsList.removeAt(position)
+        habitsList.removeIf { it.id == id }
     }
 
     fun addHabit(habitModel: HabitModel?) {
         if (habitModel == null) {
             return
         }
+        habitModel.id = habitsList.size
         habitsList = ArrayList(habitsList)
         habitsList.add(0, habitModel)
     }
@@ -54,6 +59,7 @@ object HabitRepositoryTest {
     }
 
     private fun getRandomHabits(): MutableList<HabitModel> {
+        val arr = listOf("a", "b", "c", "d")
         val list = mutableListOf<HabitModel>()
         (0..20).forEach {
             val type = if (it % 2 == 0) {
@@ -63,7 +69,7 @@ object HabitRepositoryTest {
             }
             val habit = HabitModel(
                 id = it,
-                name = "Habit",
+                name = it.toString(),
                 countRepeats = 1213,
                 description = "My best habit!",
                 color = Color.RED,

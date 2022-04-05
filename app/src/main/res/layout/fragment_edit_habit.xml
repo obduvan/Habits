@@ -1,283 +1,267 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_bright"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context=".ui.editHabit.EditHabitFragment">
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.example.habits.ui.editHabit.EditHabitViewModel" />
-    </data>
-
-    <ScrollView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".ui.editHabit.EditHabitFragment"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white_bright"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_left"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp" />
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_left"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="16dp" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline_right"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_constraintGuide_end="16dp" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp" />
 
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:hint="@string/habit_name"
-                app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                app:layout_constraintStart_toStartOf="@id/guideline_left"
-                app:layout_constraintTop_toTopOf="parent">
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hint="@string/habit_name"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toTopOf="parent">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/name"
-                    style="@style/BaseEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:inputType="text"
-                    android:text="@={viewModel.name}"
-                    android:maxLength="40"
-                    android:maxLines="1"/>
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_description"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:counterEnabled="true"
-                app:counterMaxLength="200"
-                app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                app:layout_constraintStart_toStartOf="@id/guideline_left"
-                app:layout_constraintTop_toBottomOf="@id/layout_name">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/description"
-                    style="@style/BaseEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="@={viewModel.description}"
-                    android:gravity="top"
-                    android:hint="@string/habit_description"
-                    android:inputType="textMultiLine"
-                    android:maxLength="200" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_count_repeats"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                app:layout_constraintStart_toStartOf="@id/guideline_left"
-
-                app:layout_constraintTop_toBottomOf="@+id/layout_description">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/count_repeats"
-                    style="@style/BaseEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:hint="@string/repeats"
-                    android:inputType="number"
-                    android:text="@={viewModel.countRepeats}"
-
-                    android:maxLength="9"
-                    android:textSize="14sp" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layout_interval"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                app:layout_constraintStart_toStartOf="@id/guideline_left"
-                app:layout_constraintTop_toBottomOf="@id/layout_count_repeats">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/interval"
-                    style="@style/BaseEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="10dp"
-                    android:text="@={viewModel.interval}"
-
-                    android:hint="@string/habit_interval"
-                    android:inputType="number"
-                    android:maxLength="9"
-                    android:maxLines="1" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <View
-                android:layout_width="0dp"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name"
+                style="@style/BaseEditText"
+                android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/grey_alto_edge"
-                app:layout_constraintBottom_toBottomOf="@+id/priority_spinner"
-                app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                app:layout_constraintStart_toStartOf="@id/guideline_left"
-                app:layout_constraintTop_toTopOf="@+id/priority_name" />
+                android:inputType="text"
+                android:maxLength="40"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/priority_name"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:layout_marginVertical="20dp"
-                android:fontFamily="@font/roboto_regular"
-                android:gravity="center"
-                android:paddingHorizontal="10dp"
-                android:text="@string/priority"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@id/guideline_left"
-                app:layout_constraintTop_toBottomOf="@id/layout_interval" />
 
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/priority_spinner"
-                style="?attr/spinnerDropDownItemStyle"
-                android:layout_width="wrap_content"
-                android:selectedItemPosition="@={viewModel.priorityPosition}"
-                android:layout_height="50dp"
-                android:entries="@array/priorities"
-                android:popupBackground="@drawable/solid_white_edge"
-                app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                app:layout_constraintTop_toTopOf="@id/priority_name" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:counterEnabled="true"
+            app:counterMaxLength="200"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/layout_name">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/type_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="20dp"
-                android:text="@string/habit_type"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="@id/guideline_right"
-                app:layout_constraintStart_toStartOf="@id/guideline_left"
-                app:layout_constraintTop_toBottomOf="@id/priority_spinner" />
-
-            <RadioGroup
-                android:id="@+id/types"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/description"
+                style="@style/BaseEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="35dp"
-                android:orientation="horizontal"
-                android:checkedButton="@={viewModel.typePosition}"
-                app:layout_constraintStart_toStartOf="@id/type_name"
-                app:layout_constraintTop_toBottomOf="@id/type_name">
-
-                <RadioButton
-
-                    android:id="@+id/good_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/habit_type_good" />
-
-                <RadioButton
-                    android:id="@+id/bad_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/habit_type_bad" />
-            </RadioGroup>
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/selected_color"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginTop="5dp"
-                android:elevation="0dp"
-                app:layout_constraintStart_toStartOf="@id/type_name"
-                app:layout_constraintTop_toBottomOf="@id/types" />
-
-            <TextView
-                android:id="@+id/hsv_color"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="5dp"
-                app:layout_constraintStart_toEndOf="@id/selected_color"
-                app:layout_constraintTop_toTopOf="@id/selected_color" />
-
-            <TextView
-                android:id="@+id/grb_color"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="@id/hsv_color"
-                app:layout_constraintTop_toBottomOf="@id/hsv_color" />
-
-
-            <HorizontalScrollView
-                android:id="@+id/sv_colors"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/selected_color">
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_color"
-                        android:layout_width="1440dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:elevation="20dp"
-                        android:orientation="horizontal"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintBottom_toBottomOf="@id/rv_background"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/rv_background"
-                        tools:listitem="@layout/color_view" />
-
-                    <View
-                        android:id="@+id/rv_background"
-                        android:layout_width="1440dp"
-                        android:layout_height="100dp"
-                        android:elevation="0dp" />
-
-                </FrameLayout>
-
-            </HorizontalScrollView>
-
-            <Button
-                android:id="@+id/button_save"
-                android:layout_width="180dp"
-                android:layout_height="55dp"
                 android:layout_marginTop="10dp"
-                android:text="@string/save"
-                android:textAllCaps="false"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/sv_colors" />
+                android:gravity="top"
+                android:hint="@string/habit_description"
+                android:inputType="textMultiLine"
+                android:maxLength="200" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-</layout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_count_repeats"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+
+            app:layout_constraintTop_toBottomOf="@+id/layout_description">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/count_repeats"
+                style="@style/BaseEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@string/repeats"
+                android:inputType="number"
+
+                android:maxLength="9"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_interval"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/layout_count_repeats">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/interval"
+                style="@style/BaseEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+
+                android:hint="@string/habit_interval"
+                android:inputType="number"
+                android:maxLength="9"
+                android:maxLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background="@drawable/grey_alto_edge"
+            app:layout_constraintBottom_toBottomOf="@+id/priority_spinner"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toTopOf="@+id/priority_name" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/priority_name"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginVertical="20dp"
+            android:fontFamily="@font/roboto_regular"
+            android:gravity="center"
+            android:paddingHorizontal="10dp"
+            android:text="@string/priority"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/layout_interval" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/priority_spinner"
+            style="?attr/spinnerDropDownItemStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:entries="@array/priorities"
+            android:popupBackground="@drawable/solid_white_edge"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintTop_toTopOf="@id/priority_name" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/type_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="20dp"
+            android:text="@string/habit_type"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@id/guideline_right"
+            app:layout_constraintStart_toStartOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/priority_spinner" />
+
+        <RadioGroup
+            android:id="@+id/types"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="35dp"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@id/type_name"
+            app:layout_constraintTop_toBottomOf="@id/type_name">
+
+            <RadioButton
+
+                android:id="@+id/good_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/habit_type_good" />
+
+            <RadioButton
+                android:id="@+id/bad_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/habit_type_bad" />
+        </RadioGroup>
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/selected_color"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:elevation="0dp"
+            app:layout_constraintStart_toStartOf="@id/type_name"
+            app:layout_constraintTop_toBottomOf="@id/types" />
+
+        <TextView
+            android:id="@+id/hsv_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toEndOf="@id/selected_color"
+            app:layout_constraintTop_toTopOf="@id/selected_color" />
+
+        <TextView
+            android:id="@+id/grb_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/hsv_color"
+            app:layout_constraintTop_toBottomOf="@id/hsv_color" />
+
+
+        <HorizontalScrollView
+            android:id="@+id/sv_colors"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/selected_color">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_color"
+                    android:layout_width="1440dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:elevation="20dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="@id/rv_background"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/rv_background"
+                    tools:listitem="@layout/color_view" />
+
+                <View
+                    android:id="@+id/rv_background"
+                    android:layout_width="1440dp"
+                    android:layout_height="100dp"
+                    android:elevation="0dp" />
+
+            </FrameLayout>
+
+        </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="180dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/save"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sv_colors" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

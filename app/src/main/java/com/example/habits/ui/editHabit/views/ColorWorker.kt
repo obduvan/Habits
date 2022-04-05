@@ -8,9 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 
-interface OnSelectedColorListener{
-    fun onSelectedColor(selectedColor: Int)
-}
 
 class ColorWorker(
     recyclerView: RecyclerView,
@@ -28,8 +25,6 @@ class ColorWorker(
         private const val brightness = 1f
     }
 
-
-    var colorListener: OnSelectedColorListener? = null
 
     private val colorAdapter: ColorAdapter = ColorAdapter(this)
     private var colors: List<Int> = (0 until countElements).map {
@@ -65,7 +60,6 @@ class ColorWorker(
 
     override fun onColorClick(position: Int) {
         selectedColor = colors[position]
-        colorListener?.onSelectedColor(selectedColor)
         setColorInfo(selectedColor)
     }
 

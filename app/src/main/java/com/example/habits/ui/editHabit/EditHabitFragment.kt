@@ -1,34 +1,27 @@
 package com.example.habits.ui.editHabit
 
+
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
-
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-
-
 import com.example.habits.R
 import com.example.habits.databinding.FragmentEditHabitBinding
-
 import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitPriority
 import com.example.habits.model.HabitType
-
 import com.example.habits.ui.editHabit.views.ColorWorker
-import com.example.habits.ui.editHabit.views.OnSelectedColorListener
 import com.example.habits.ui.habits.KEY_POSITION
+import java.lang.Integer.max
 
-class EditHabitFragment : Fragment(), OnSelectedColorListener {
+class EditHabitFragment : Fragment() {
 
     private var _binding: FragmentEditHabitBinding? = null
     private val binding
@@ -37,18 +30,16 @@ class EditHabitFragment : Fragment(), OnSelectedColorListener {
         )
 
     private var colorWorker: ColorWorker? = null
-
     private var position: Int = -1
-    private var intentColor: Int? = null
+    private var selectedColor: Int? = null
 
-    private lateinit var viewModel: EditHabitViewModel
+    private val viewModel: EditHabitViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         position = arguments?.getInt(KEY_POSITION, position) ?: position
-        viewModel =
-            ViewModelProvider(this, ViewModelFactory(position)).get(EditHabitViewModel::class.java)
+        viewModel.loadHabit(position)
     }
 
     override fun onCreateView(
@@ -56,9 +47,8 @@ class EditHabitFragment : Fragment(), OnSelectedColorListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_habit, container, false)
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = this
+
+        _binding = FragmentEditHabitBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -67,39 +57,47 @@ class EditHabitFragment : Fragment(), OnSelectedColorListener {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSave.setOnClickListener { onSaveButtonClicked() }
-        loadHabit(0)
-        intentColor = viewModel.color
+        viewModel.habitLiveData.observe(viewLifecycleOwner) { habit -> initViews(habit) }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        viewModel.saveStateHabit(habitModel = getHabitModel())
+    }
+
+    private fun initViews(habitModel: HabitModel?) {
+        if (habitModel != null) {
+            with(habitModel) {
+                selectedColor = color
+                binding.name.setText(name)
+                binding.description.setText(description)
+                binding.countRepeats.setText(setNumberView(countRepeats))
+                binding.interval.setText(setNumberView(interval))
+                binding.selectedColor.setCardBackgroundColor(color)
+                binding.prioritySpinner.setSelection(priority.ordinal)
+                (binding.types.getChildAt(type.ordinal) as RadioButton).isChecked = true
+            }
+        } else {
+            (binding.types.getChildAt(HabitType.GOOD.ordinal) as RadioButton).isChecked = true
+        }
+
         colorWorker = ColorWorker(
             binding.rvColor,
             binding.rvBackground,
             binding.selectedColor,
             binding.grbColor,
             binding.hsvColor,
-            intentColor,
+            selectedColor,
         )
-        colorWorker?.colorListener = this
     }
 
-    private fun loadHabit(id: Int) {
-//        viewModel.loadHabit(id)
-
-        (binding.types.getChildAt(viewModel.typePosition) as RadioButton).isChecked = true
-
-
-//        if (habitModel != null) {
-//            with(habitModel) {
-//                intentColor = color
-//                binding.name.setText(name)
-//                binding.description.setText(description)
-//                binding.countRepeats.setText(countRepeats.toString())
-//                binding.interval.setText(interval.toString())
-//                binding.selectedColor.setCardBackgroundColor(color)
-//                binding.prioritySpinner.setSelection(priority.ordinal)
-//                (binding.types.getChildAt(type.ordinal) as RadioButton).isChecked = true
-//            }
-//        } else {
-//            (binding.types.getChildAt(HabitType.GOOD.ordinal) as RadioButton).isChecked = true
-//        }
+    private fun setNumberView(number: Int): String {
+        return if (number == 0) {
+            ""
+        } else {
+            number.toString()
+        }
     }
 
     private fun onSaveButtonClicked() {
@@ -143,23 +141,24 @@ class EditHabitFragment : Fragment(), OnSelectedColorListener {
         Toast.makeText(requireContext(), name, Toast.LENGTH_SHORT).show()
     }
 
-    private fun saveHabit() {
+    private fun getHabitModel(): HabitModel {
 
-        val habitModel = HabitModel(
+        return HabitModel(
             id = position,
             name = binding.name.text.toString(),
             description = binding.description.text.toString(),
             color = colorWorker?.getSelectedColor() ?: Color.WHITE,
-            countRepeats = binding.countRepeats.text.toString().toInt(),
-            interval = binding.interval.text.toString().toInt(),
+            countRepeats = binding.countRepeats.text.toString().toIntOrNull() ?: 0,
+            interval = binding.interval.text.toString().toIntOrNull() ?: 0,
             priority = HabitPriority.valueOf(binding.prioritySpinner.selectedItem.toString()),
             type = getSelectedType(),
         )
-
-        viewModel.saveHabit(position, habitModel)
-        findNavController().popBackStack()
     }
 
+    private fun saveHabit() {
+        viewModel.saveHabit(position, habitModel = getHabitModel())
+        findNavController().popBackStack()
+    }
 
     private fun getSelectedType(): HabitType {
         return when (binding.types.checkedRadioButtonId) {
@@ -171,9 +170,5 @@ class EditHabitFragment : Fragment(), OnSelectedColorListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onSelectedColor(selectedColor: Int) {
-        viewModel.color = selectedColor
     }
 }

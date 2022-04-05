@@ -41,6 +41,7 @@
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginBottom="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tab_layout"
@@ -61,12 +62,12 @@
         app:layout_anchorGravity="end|top" />
 
 
-    <include
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/bottom_sheet"
+        android:name="com.example.habits.ui.habits.BottomSheetFragment"
         style="?attr/bottomSheetStyle"
-        layout="@layout/fragment_bottom_sheet"
         android:layout_width="match_parent"
-        android:layout_height="175dp"
+        android:layout_height="170dp"
         app:behavior_peekHeight="56dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
 
