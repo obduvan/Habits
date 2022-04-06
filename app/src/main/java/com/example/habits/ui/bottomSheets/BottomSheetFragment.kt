@@ -1,4 +1,4 @@
-package com.example.habits.ui.habits
+package com.example.habits.ui.bottomSheets
 
 import android.os.Bundle
 import android.text.Editable
@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.habits.databinding.FragmentBottomSheetBinding
 import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitType
+import com.example.habits.ui.habits.HabitsViewModel
 
 class BottomSheetFragment : Fragment() {
 

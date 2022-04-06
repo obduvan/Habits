@@ -59,7 +59,6 @@ object HabitRepositoryTest {
     }
 
     private fun getRandomHabits(): MutableList<HabitModel> {
-        val arr = listOf("a", "b", "c", "d")
         val list = mutableListOf<HabitModel>()
         (0..20).forEach {
             val type = if (it % 2 == 0) {

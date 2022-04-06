@@ -1,8 +1,9 @@
-package com.example.habits.ui.habits
+package com.example.habits.ui.habits.viewPager
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.habits.model.HabitType
+import com.example.habits.ui.habits.HabitsFragment
 
 
 class PagerHabitsAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {

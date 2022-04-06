@@ -1,4 +1,4 @@
-package com.example.habits.ui.habits
+package com.example.habits.ui.habits.viewPager
 
 import android.os.Bundle
 import android.view.LayoutInflater
