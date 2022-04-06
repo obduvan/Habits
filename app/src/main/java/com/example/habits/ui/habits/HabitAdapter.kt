@@ -74,7 +74,6 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
         }
 
         private fun onClick() {
-            Log.e("das", idHabit.toString())
             onHabitListener.onHabitClick(idHabit)
         }
     }

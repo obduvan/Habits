@@ -15,7 +15,8 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            app:tabTextAppearance="@style/CustomTextAppearanceTab"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tabGravity="fill"
@@ -68,7 +69,7 @@
         style="?attr/bottomSheetStyle"
         android:layout_width="match_parent"
         android:layout_height="170dp"
-        app:behavior_peekHeight="56dp"
+        app:behavior_peekHeight="54dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
 
 

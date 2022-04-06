@@ -11,7 +11,7 @@
         android:id="@+id/bottom_sheet_title"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:background="@color/silver"
+        android:background="@color/grey_alto_1"
         android:gravity="center_vertical"
         android:paddingHorizontal="15dp"
         android:text="@string/bottom_sheet_title"

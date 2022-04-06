@@ -19,7 +19,6 @@ import com.example.habits.model.HabitPriority
 import com.example.habits.model.HabitType
 import com.example.habits.ui.editHabit.views.ColorWorker
 import com.example.habits.ui.habits.KEY_POSITION
-import java.lang.Integer.max
 
 class EditHabitFragment : Fragment() {
 
@@ -62,7 +61,6 @@ class EditHabitFragment : Fragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-
         viewModel.saveStateHabit(habitModel = getHabitModel())
     }
 
