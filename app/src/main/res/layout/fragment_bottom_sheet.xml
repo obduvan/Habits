@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white_bright">
@@ -44,6 +43,7 @@
         android:hint="@string/search_by_name_title"
         android:maxLength="50"
         android:maxLines="1"
+        android:inputType="text"
         android:textSize="16sp"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:layout_constraintEnd_toEndOf="parent"

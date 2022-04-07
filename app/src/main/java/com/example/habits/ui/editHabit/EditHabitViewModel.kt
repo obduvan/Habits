@@ -1,5 +1,6 @@
 package com.example.habits.ui.editHabit
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,5 +30,10 @@ class EditHabitViewModel: ViewModel() {
         } else {
             repositoryTest.updateHabit(id, habitModel)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        Log.e("sda","da")
     }
 }

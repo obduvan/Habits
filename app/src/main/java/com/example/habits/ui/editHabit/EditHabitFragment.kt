@@ -46,7 +46,6 @@ class EditHabitFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentEditHabitBinding.inflate(inflater, container, false)
 
         return binding.root
@@ -148,7 +147,7 @@ class EditHabitFragment : Fragment() {
             color = colorWorker?.getSelectedColor() ?: Color.WHITE,
             countRepeats = binding.countRepeats.text.toString().toIntOrNull() ?: 0,
             interval = binding.interval.text.toString().toIntOrNull() ?: 0,
-            priority = HabitPriority.valueOf(binding.prioritySpinner.selectedItem.toString()),
+            priority = HabitPriority.valueOf(binding.prioritySpinner.selectedItem.toString().uppercase()),
             type = getSelectedType(),
         )
     }

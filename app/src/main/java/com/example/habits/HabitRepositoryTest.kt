@@ -74,7 +74,7 @@ object HabitRepositoryTest {
                 color = Color.RED,
                 interval = 31233122,
                 type = type,
-                priority = HabitPriority.High
+                priority = HabitPriority.HIGH
             )
             list.add(habit)
         }

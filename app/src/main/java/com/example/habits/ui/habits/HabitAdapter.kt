@@ -1,7 +1,6 @@
 package com.example.habits.ui.habits
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncDifferConfig
@@ -49,14 +48,14 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
                 binding.color.setBackgroundColor(color)
                 binding.habitDescription.text = description
                 binding.habitName.text = name
-                binding.habitPriority.text = priority.name
+                binding.habitPriority.text = itemView.context.getText(priority.resId)
                 binding.habitTextType.text = itemView.context.getString(type.resourceId)
                 binding.interval.text = interval.toString()
 
                 val colorPriority = when (priority) {
-                    HabitPriority.High -> Color.RED
-                    HabitPriority.Medium -> Color.BLUE
-                    HabitPriority.Low -> Color.GRAY
+                    HabitPriority.HIGH -> Color.RED
+                    HabitPriority.MEDIUM -> Color.BLUE
+                    HabitPriority.LOW -> Color.GRAY
                 }
 
                 binding.habitPriority.setTextColor(colorPriority)
