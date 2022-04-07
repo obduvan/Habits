@@ -32,7 +32,7 @@ class HabitsViewModel : ViewModel() {
 
     fun loadHabits(type: HabitType) {
         habits = repository.getHabits(type)
-        setFilter(filterHabit)
+        updateData()
     }
 
     fun setSort(mComparator: Comparator<HabitModel>) {

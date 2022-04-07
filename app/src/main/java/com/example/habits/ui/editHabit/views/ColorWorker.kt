@@ -9,6 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 
 
+interface OnColorListener1 {
+    fun onColorClick(position: Int)
+}
+
 class ColorWorker(
     recyclerView: RecyclerView,
     backgroundView: View,
@@ -16,6 +20,7 @@ class ColorWorker(
     private val rgbText: TextView,
     private val hsvTextView: TextView,
     intentColor: Int? = null,
+
 ) :
     OnColorListener {
 

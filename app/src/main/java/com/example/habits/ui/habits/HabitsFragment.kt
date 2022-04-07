@@ -84,7 +84,7 @@ class HabitsFragment : Fragment(), OnHabitListener {
         }
     }
 
-    override fun onHabitClick(position: Int?) {
+    override fun onHabitClick(position: Int) {
         findNavController().navigate(
             R.id.action_navigation_habits_to_navigation_edit_habit,
             bundleOf(KEY_POSITION to position)
