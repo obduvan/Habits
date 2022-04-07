@@ -31,9 +31,4 @@ class EditHabitViewModel: ViewModel() {
             repositoryTest.updateHabit(id, habitModel)
         }
     }
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.e("sda","da")
-    }
 }
