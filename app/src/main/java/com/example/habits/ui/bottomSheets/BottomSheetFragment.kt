@@ -58,8 +58,8 @@ class BottomSheetFragment : Fragment() {
         })
 
         binding.switcherSortByName.setOnClickListener {
-            viewModelGood.setSort(nameComparator)
-            viewModelBad.setSort(nameComparator)
+            viewModelGood.setSorting(nameComparator)
+            viewModelBad.setSorting(nameComparator)
         }
     }
 

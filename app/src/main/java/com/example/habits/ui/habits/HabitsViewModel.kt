@@ -22,20 +22,20 @@ class HabitsViewModel : ViewModel() {
 
     fun setFilter(filter: String) {
         filterHabit = filter
-        updateData()
+        updateFilters()
     }
 
-    private fun updateData() {
+    private fun updateFilters() {
         mutableHabitList.value =
             habits.filter { it.name.contains(filterHabit) }.sortedWith(comparator)
     }
 
     fun loadHabits(type: HabitType) {
         habits = repository.getHabits(type)
-        updateData()
+        updateFilters()
     }
 
-    fun setSort(mComparator: Comparator<HabitModel>) {
+    fun setSorting(mComparator: Comparator<HabitModel>) {
         isSorted = !isSorted
 
         comparator = if (isSorted) {
@@ -43,6 +43,6 @@ class HabitsViewModel : ViewModel() {
         } else {
             emptyComparator
         }
-        updateData()
+        updateFilters()
     }
 }
