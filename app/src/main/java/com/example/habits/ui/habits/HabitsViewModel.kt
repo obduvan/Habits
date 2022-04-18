@@ -1,48 +1,55 @@
 package com.example.habits.ui.habits
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.habits.HabitRepositoryTest
+import androidx.lifecycle.*
 import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitType
+import com.example.habits.repository.IHabitRepository
+import com.example.habits.utils.addLiveData
+import com.example.habits.utils.map
 
-class HabitsViewModel : ViewModel() {
-    private var repository = HabitRepositoryTest
-    private var habits: List<HabitModel> = ArrayList()
+class HabitsViewModel(private val repository: IHabitRepository) : ViewModel() {
+    private var filter = MutableLiveData("")
 
-    private val mutableHabitList = MutableLiveData<List<HabitModel>>()
-    val habitList: LiveData<List<HabitModel>> = mutableHabitList
-
-    private var filterHabit = ""
-    private var isSorted = false
     private val emptyComparator = Comparator { _: HabitModel, _: HabitModel -> 0 }
-    private var comparator = emptyComparator
+    private var comparator = MutableLiveData<Comparator<HabitModel>>(emptyComparator)
+    private var isSorted = false
 
+    private val habitList: LiveData<List<HabitModel>> = repository.getHabits()
+        .addLiveData(filter)
+        .addLiveData(comparator)
+        .map { (pair, comparator) ->
+            val habits = pair?.first ?: listOf()
+            val filter = pair?.second ?: ""
+            val habitComparator = comparator ?: emptyComparator
+            habits.filter { it.name.contains(filter) }.sortedWith(habitComparator)
+        }
 
     fun setFilter(filter: String) {
-        filterHabit = filter
-        updateFilters()
+        this.filter.postValue(filter)
     }
 
-    private fun updateFilters() {
-        mutableHabitList.value =
-            habits.filter { it.name.contains(filterHabit) }.sortedWith(comparator)
+    fun getHabits(type: HabitType?): LiveData<List<HabitModel>> {
+        return if (type == null) habitList
+        else {
+            habitList.map { it.filter { habitModel -> habitModel.type == type } }
+        }
     }
 
-    fun loadHabits(type: HabitType) {
-        habits = repository.getHabits(type)
-        updateFilters()
-    }
-
-    fun setSorting(mComparator: Comparator<HabitModel>) {
+    fun setComparator(mComparator: Comparator<HabitModel>) {
         isSorted = !isSorted
 
-        comparator = if (isSorted) {
-            mComparator
-        } else {
-            emptyComparator
-        }
-        updateFilters()
+        comparator.postValue(
+            if (isSorted) {
+                mComparator
+            } else {
+                emptyComparator
+            }
+        )
     }
 }
+
+
+
+
+
+

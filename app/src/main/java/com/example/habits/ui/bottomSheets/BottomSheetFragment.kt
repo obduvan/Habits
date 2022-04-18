@@ -12,6 +12,8 @@ import com.example.habits.databinding.FragmentBottomSheetBinding
 import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitType
 import com.example.habits.ui.habits.HabitsViewModel
+import com.example.habits.utils.App
+import com.example.habits.utils.ViewModelFactory
 
 class BottomSheetFragment : Fragment() {
 
@@ -28,10 +30,16 @@ class BottomSheetFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModelGood =
-            ViewModelProvider(requireActivity())[HabitType.GOOD.name, HabitsViewModel::class.java]
-        viewModelBad =
-            ViewModelProvider(requireActivity())[HabitType.BAD.name, HabitsViewModel::class.java]
+
+        viewModelGood = ViewModelProvider(
+            requireActivity(),
+            ViewModelFactory((requireActivity().application as App).repository)
+        )[HabitType.GOOD.name, HabitsViewModel::class.java]
+
+        viewModelBad = ViewModelProvider(
+            requireActivity(),
+            ViewModelFactory((requireActivity().application as App).repository)
+        )[HabitType.BAD.name, HabitsViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -58,8 +66,8 @@ class BottomSheetFragment : Fragment() {
         })
 
         binding.switcherSortByName.setOnClickListener {
-            viewModelGood.setSorting(nameComparator)
-            viewModelBad.setSorting(nameComparator)
+            viewModelGood.setComparator(nameComparator)
+            viewModelBad.setComparator(nameComparator)
         }
     }
 

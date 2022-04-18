@@ -19,6 +19,8 @@ import com.example.habits.model.HabitPriority
 import com.example.habits.model.HabitType
 import com.example.habits.ui.editHabit.views.ColorWorker
 import com.example.habits.ui.habits.KEY_POSITION
+import com.example.habits.utils.App
+import com.example.habits.utils.ViewModelFactory
 
 class EditHabitFragment : Fragment() {
 
@@ -29,16 +31,19 @@ class EditHabitFragment : Fragment() {
         )
 
     private var colorWorker: ColorWorker? = null
-    private var position: Int = -1
+    private var position: Int? = null
     private var selectedColor: Int? = null
 
-    private val viewModel: EditHabitViewModel by viewModels()
+    private val viewModel: EditHabitViewModel by viewModels { ViewModelFactory((requireActivity().application as App).repository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        position = arguments?.getInt(KEY_POSITION, position) ?: position
-        viewModel.loadHabit(position)
+        position = arguments?.getInt(KEY_POSITION, -1) ?: -1
+        val pos = position
+        if (pos != null){
+            viewModel.loadHabit(pos)
+        }
     }
 
     override fun onCreateView(
@@ -55,7 +60,11 @@ class EditHabitFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonSave.setOnClickListener { onSaveButtonClicked() }
-        viewModel.habitLiveData.observe(viewLifecycleOwner) { habit -> initViews(habit) }
+        if (position != -1) {
+            viewModel.loadHabit(position).observe(viewLifecycleOwner) { habit -> initViews(habit) }
+        } else {
+            initViews()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -63,7 +72,7 @@ class EditHabitFragment : Fragment() {
         viewModel.saveStateHabit(habitModel = getHabitModel())
     }
 
-    private fun initViews(habitModel: HabitModel?) {
+    private fun initViews(habitModel: HabitModel? = null) {
         if (habitModel != null) {
             with(habitModel) {
                 selectedColor = color
@@ -147,13 +156,15 @@ class EditHabitFragment : Fragment() {
             color = colorWorker?.getSelectedColor() ?: Color.WHITE,
             countRepeats = binding.countRepeats.text.toString().toIntOrNull() ?: 0,
             interval = binding.interval.text.toString().toIntOrNull() ?: 0,
-            priority = HabitPriority.valueOf(binding.prioritySpinner.selectedItem.toString().uppercase()),
+            priority = HabitPriority.valueOf(
+                binding.prioritySpinner.selectedItem.toString().uppercase()
+            ),
             type = getSelectedType(),
         )
     }
 
     private fun saveHabit() {
-        viewModel.saveHabit(position, habitModel = getHabitModel())
+        viewModel.saveHabit(habitModel = getHabitModel())
         findNavController().popBackStack()
     }
 

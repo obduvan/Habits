@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.R
 import com.example.habits.databinding.FragmentHabitsBinding
 import com.example.habits.model.HabitType
+import com.example.habits.utils.App
+import com.example.habits.utils.ViewModelFactory
 
 
 const val KEY_POSITION = "POSITION"
@@ -24,7 +26,6 @@ class HabitsFragment : Fragment(), OnHabitListener {
 
     //    private val viewModel: HabitsViewModel by viewModels()
     private lateinit var viewModel: HabitsViewModel
-
 
     private var habitType: HabitType? = null
     private var _binding: FragmentHabitsBinding? = null
@@ -46,11 +47,15 @@ class HabitsFragment : Fragment(), OnHabitListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val habitType = arguments?.get(KEY_TYPE_HABITS) as? HabitType
+        val type = arguments?.get(KEY_TYPE_HABITS) as? HabitType
+        habitType = type
 
-        habitType?.let {
-            viewModel =
-                ViewModelProvider(requireActivity())[habitType.name, HabitsViewModel::class.java]
+        type?.let {
+             ViewModelProvider(requireActivity())[type.name, HabitsViewModel::class.java]
+            viewModel = ViewModelProvider(
+                requireActivity(),
+                ViewModelFactory((requireActivity().application as App).repository)
+            )[type.name, HabitsViewModel::class.java]
         }
     }
 
@@ -59,10 +64,6 @@ class HabitsFragment : Fragment(), OnHabitListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val habitType = arguments?.get(KEY_TYPE_HABITS) as? HabitType
-
-        habitType?.let { viewModel.loadHabits(it) }
-
         _binding = FragmentHabitsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -79,7 +80,7 @@ class HabitsFragment : Fragment(), OnHabitListener {
             adapter = adapterHabit
         }
 
-        viewModel.habitList.observe(viewLifecycleOwner) { habits ->
+        viewModel.getHabits(habitType).observe(viewLifecycleOwner) { habits ->
             adapterHabit.submitList(habits)
         }
     }
