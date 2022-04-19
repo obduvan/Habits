@@ -31,19 +31,14 @@ class EditHabitFragment : Fragment() {
         )
 
     private var colorWorker: ColorWorker? = null
-    private var position: Int? = null
-    private var selectedColor: Int? = null
+    private var position: Int = -1
 
     private val viewModel: EditHabitViewModel by viewModels { ViewModelFactory((requireActivity().application as App).repository) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        position = arguments?.getInt(KEY_POSITION, -1) ?: -1
-        val pos = position
-        if (pos != null){
-            viewModel.loadHabit(pos)
-        }
+        position = arguments?.getInt(KEY_POSITION, position) ?: position
     }
 
     override fun onCreateView(
@@ -52,19 +47,23 @@ class EditHabitFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEditHabitBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        colorWorker = ColorWorker(
+            binding.rvColor,
+            binding.rvBackground,
+            binding.selectedColor,
+            binding.grbColor,
+            binding.hsvColor
+        )
+        initViews()
+
         binding.buttonSave.setOnClickListener { onSaveButtonClicked() }
-        if (position != -1) {
-            viewModel.loadHabit(position).observe(viewLifecycleOwner) { habit -> initViews(habit) }
-        } else {
-            initViews()
-        }
+        viewModel.loadHabit(position).observe(viewLifecycleOwner) { habit -> initViews(habit) }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -75,27 +74,22 @@ class EditHabitFragment : Fragment() {
     private fun initViews(habitModel: HabitModel? = null) {
         if (habitModel != null) {
             with(habitModel) {
-                selectedColor = color
                 binding.name.setText(name)
+                colorWorker?.setSelectedColor(color)
                 binding.description.setText(description)
                 binding.countRepeats.setText(setNumberView(countRepeats))
                 binding.interval.setText(setNumberView(interval))
                 binding.selectedColor.setCardBackgroundColor(color)
                 binding.prioritySpinner.setSelection(priority.ordinal)
                 (binding.types.getChildAt(type.ordinal) as RadioButton).isChecked = true
+                (binding.types.getChildAt((type.ordinal + 1) % HabitType.values().size) as RadioButton).isChecked =
+                    false
             }
         } else {
             (binding.types.getChildAt(HabitType.GOOD.ordinal) as RadioButton).isChecked = true
+            (binding.types.getChildAt((HabitType.GOOD.ordinal + 1) % HabitType.values().size) as RadioButton).isChecked =
+                false
         }
-
-        colorWorker = ColorWorker(
-            binding.rvColor,
-            binding.rvBackground,
-            binding.selectedColor,
-            binding.grbColor,
-            binding.hsvColor,
-            selectedColor,
-        )
     }
 
     private fun setNumberView(number: Int): String {

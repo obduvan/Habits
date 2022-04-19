@@ -9,7 +9,6 @@ import com.example.habits.repository.IHabitRepository
 class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel() {
 
     private var _habitLiveData = MutableLiveData<HabitModel>()
-    var habitLiveData: LiveData<HabitModel> = _habitLiveData
 
     fun loadHabit(id: Int): LiveData<HabitModel> {
         if (_habitLiveData.value == null) {

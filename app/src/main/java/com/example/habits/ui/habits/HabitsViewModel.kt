@@ -24,13 +24,14 @@ class HabitsViewModel(private val repository: IHabitRepository) : ViewModel() {
             habits.filter { it.name.contains(filter) }.sortedWith(habitComparator)
         }
 
-    fun setFilter(filter: String) {
-        this.filter.postValue(filter)
+    fun setFilter(mFilter: String) {
+        filter.postValue(mFilter)
     }
 
     fun getHabits(type: HabitType?): LiveData<List<HabitModel>> {
-        return if (type == null) habitList
-        else {
+        return if (type == null) {
+            habitList
+        } else {
             habitList.map { it.filter { habitModel -> habitModel.type == type } }
         }
     }

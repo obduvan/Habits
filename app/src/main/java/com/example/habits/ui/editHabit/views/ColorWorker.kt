@@ -9,18 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 
 
-interface OnColorListener1 {
-    fun onColorClick(position: Int)
-}
-
 class ColorWorker(
     recyclerView: RecyclerView,
     backgroundView: View,
     private val selectedColorView: MaterialCardView,
     private val rgbText: TextView,
     private val hsvTextView: TextView,
-    intentColor: Int? = null,
-
 ) :
     OnColorListener {
 
@@ -35,8 +29,8 @@ class ColorWorker(
     private var colors: List<Int> = (0 until countElements).map {
         Color.HSVToColor(floatArrayOf(360f / 16f * (it + 1) - 360f / 16f / 2f, 0.9f, 1f))
     }
+    private var selectedColor = colors[0]
 
-    private var selectedColor = intentColor ?: colors[0]
 
     init {
         backgroundView.background = getGradientBackground()
@@ -48,6 +42,11 @@ class ColorWorker(
         }
 
         colorAdapter.submitList(colors)
+    }
+
+    fun setSelectedColor(color: Int){
+        setColorInfo(color)
+        selectedColor = color
     }
 
     fun getSelectedColor() = selectedColor
