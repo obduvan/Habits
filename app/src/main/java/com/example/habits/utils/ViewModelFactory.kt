@@ -6,14 +6,14 @@ import com.example.habits.repository.IHabitRepository
 import com.example.habits.ui.editHabit.EditHabitViewModel
 import com.example.habits.ui.habits.HabitsViewModel
 
-class ViewModelFactory(private val habitRepository: IHabitRepository) : ViewModelProvider.Factory{
+class ViewModelFactory(private val habitRepository: IHabitRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        val viewModel = when(modelClass){
-            HabitsViewModel :: class.java ->{
+        val viewModel = when (modelClass) {
+            HabitsViewModel::class.java -> {
                 HabitsViewModel(habitRepository)
-
             }
-            EditHabitViewModel :: class.java -> {
+
+            EditHabitViewModel::class.java -> {
                 EditHabitViewModel(habitRepository)
             }
             else -> throw IllegalStateException("Unknown ViewModel class.")
