@@ -72,6 +72,8 @@ class EditHabitFragment : Fragment() {
     }
 
     private fun initViews(habitModel: HabitModel? = null) {
+        val habitTypeCount = HabitType.values().size
+
         if (habitModel != null) {
             with(habitModel) {
                 binding.name.setText(name)
@@ -82,12 +84,12 @@ class EditHabitFragment : Fragment() {
                 binding.selectedColor.setCardBackgroundColor(color)
                 binding.prioritySpinner.setSelection(priority.ordinal)
                 (binding.types.getChildAt(type.ordinal) as RadioButton).isChecked = true
-                (binding.types.getChildAt((type.ordinal + 1) % HabitType.values().size) as RadioButton).isChecked =
+                (binding.types.getChildAt((type.ordinal + 1) % habitTypeCount) as RadioButton).isChecked =
                     false
             }
         } else {
             (binding.types.getChildAt(HabitType.GOOD.ordinal) as RadioButton).isChecked = true
-            (binding.types.getChildAt((HabitType.GOOD.ordinal + 1) % HabitType.values().size) as RadioButton).isChecked =
+            (binding.types.getChildAt((HabitType.GOOD.ordinal + 1) % habitTypeCount) as RadioButton).isChecked =
                 false
         }
     }

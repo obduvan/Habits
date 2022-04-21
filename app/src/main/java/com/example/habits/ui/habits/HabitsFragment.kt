@@ -44,26 +44,22 @@ class HabitsFragment : Fragment(), OnHabitListener {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val type = arguments?.get(KEY_TYPE_HABITS) as? HabitType
-        habitType = type
-
-        type?.let {
-             ViewModelProvider(requireActivity())[type.name, HabitsViewModel::class.java]
-            viewModel = ViewModelProvider(
-                requireActivity(),
-                ViewModelFactory((requireActivity().application as App).repository)
-            )[type.name, HabitsViewModel::class.java]
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val type = arguments?.get(KEY_TYPE_HABITS) as? HabitType
+        habitType = type
+
+        type?.let {
+            ViewModelProvider(requireActivity())[type.name, HabitsViewModel::class.java]
+            viewModel = ViewModelProvider(
+                requireActivity(),
+                ViewModelFactory((requireActivity().application as App).repository)
+            )[type.name, HabitsViewModel::class.java]
+        }
+
         _binding = FragmentHabitsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -80,8 +76,11 @@ class HabitsFragment : Fragment(), OnHabitListener {
             adapter = adapterHabit
         }
 
-        viewModel.getHabits(habitType).observe(viewLifecycleOwner) { habits ->
-            adapterHabit.submitList(habits)
+        val type = habitType
+        if (type != null) {
+            viewModel.getHabits(type).observe(viewLifecycleOwner) { habits ->
+                adapterHabit.submitList(habits)
+            }
         }
     }
 

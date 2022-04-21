@@ -28,12 +28,8 @@ class HabitsViewModel(private val repository: IHabitRepository) : ViewModel() {
         filter.postValue(mFilter)
     }
 
-    fun getHabits(type: HabitType?): LiveData<List<HabitModel>> {
-        return if (type == null) {
-            habitList
-        } else {
-            habitList.map { it.filter { habitModel -> habitModel.type == type } }
-        }
+    fun getHabits(type: HabitType): LiveData<List<HabitModel>> {
+        return habitList.map { it.filter { habitModel -> habitModel.type == type } }
     }
 
     fun setComparator(mComparator: Comparator<HabitModel>) {
@@ -48,9 +44,3 @@ class HabitsViewModel(private val repository: IHabitRepository) : ViewModel() {
         )
     }
 }
-
-
-
-
-
-
