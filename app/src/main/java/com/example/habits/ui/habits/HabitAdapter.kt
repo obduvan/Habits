@@ -47,9 +47,9 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
                 binding.interval.text = interval.toString()
 
                 val colorPriority = when (priority) {
-                    HabitPriority.HIGH -> Color.RED
-                    HabitPriority.MEDIUM -> Color.BLUE
-                    HabitPriority.LOW -> Color.GRAY
+                    HabitPriority.HIGH -> itemView.context.getColor(R.color.bittersweet)
+                    HabitPriority.MEDIUM -> itemView.context.getColor(R.color.polo_blue)
+                    HabitPriority.LOW -> itemView.context.getColor(R.color.dusty_grey)
                 }
 
                 itemView.setOnClickListener { onHabitListener.onHabitClick(id) }
