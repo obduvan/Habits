@@ -16,8 +16,8 @@ interface HabitDao {
     @Query("select * from Habits where id == :id")
     fun getHabit(id: Int): LiveData<HabitEntity?>
 
-    @Query("delete from Habits where id == :id")
-    fun delete(id: Int)
+    @Delete
+    suspend fun delete(habit: HabitEntity)
 
     @Update
     fun update(habit: HabitEntity)
@@ -26,5 +26,5 @@ interface HabitDao {
     fun insert(habit: HabitEntity)
 
     @Query("delete from Habits")
-    fun deleteAll()
+    suspend fun deleteAll()
 }

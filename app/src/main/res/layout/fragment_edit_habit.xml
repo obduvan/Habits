@@ -172,6 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="35dp"
             android:orientation="horizontal"
+            android:checkedButton="@id/good_type"
             app:layout_constraintStart_toStartOf="@id/type_name"
             app:layout_constraintTop_toBottomOf="@id/type_name">
 

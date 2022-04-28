@@ -14,7 +14,7 @@ import com.example.habits.R
 import com.example.habits.databinding.FragmentHabitsBinding
 import com.example.habits.model.HabitType
 import com.example.habits.utils.App
-import com.example.habits.utils.ViewModelFactory
+import com.example.habits.utils.HabitsViewModelFactory
 
 
 const val KEY_POSITION = "POSITION"
@@ -53,10 +53,9 @@ class HabitsFragment : Fragment(), OnHabitListener {
         habitType = type
 
         type?.let {
-            ViewModelProvider(requireActivity())[type.name, HabitsViewModel::class.java]
             viewModel = ViewModelProvider(
                 requireActivity(),
-                ViewModelFactory((requireActivity().application as App).repository)
+                HabitsViewModelFactory((requireActivity().application as App).repository)
             )[type.name, HabitsViewModel::class.java]
         }
 

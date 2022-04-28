@@ -6,13 +6,15 @@ import com.example.habits.model.HabitType
 
 interface IHabitRepository {
 
-    fun getHabits(): LiveData<List<HabitModel>>
+    val habits: LiveData<List<HabitModel>>
 
     fun getHabits(type: HabitType): LiveData<List<HabitModel>>
 
     fun getHabit(id: Int): LiveData<HabitModel>
 
-    fun saveHabit(habit: HabitModel)
+    suspend fun createHabit(habit: HabitModel)
 
-    fun deleteHabit(id: Int)
+    suspend fun updateHabit(habit: HabitModel)
+
+    suspend fun deleteHabit(habit: HabitModel)
 }

@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitPriority
 import com.example.habits.model.HabitType
+import java.util.*
 
 @Entity(tableName = "Habits")
 data class HabitEntity(
@@ -17,6 +18,7 @@ data class HabitEntity(
     var interval: Int,
     var type: HabitType,
     var priority: HabitPriority,
+
 ) {
 
     companion object {

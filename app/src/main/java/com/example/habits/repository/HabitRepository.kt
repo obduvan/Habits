@@ -1,6 +1,7 @@
 package com.example.habits.repository
 
 import android.graphics.Color
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitPriority
@@ -8,26 +9,14 @@ import com.example.habits.model.HabitType
 import com.example.habits.room.HabitDao
 import com.example.habits.room.HabitEntity
 import com.example.habits.utils.map
+import kotlinx.coroutines.delay
+import java.lang.Thread.sleep
 
 
 class HabitRepository(private val habitsDao: HabitDao) : IHabitRepository {
 
-    init {
-//        addRandomHabits()
-//        deleteAll()
-    }
 
-    override fun saveHabit(habit: HabitModel) {
-        if (habit.id == -1) {
-            habit.id = 0
-            addHabit(habit)
-        } else {
-            updateHabit(habit)
-        }
-    }
-
-    override fun getHabits(): LiveData<List<HabitModel>> =
-        habitsDao.getAll().map { it.map { entity -> entity.toModel() } }
+    override val habits = habitsDao.getAll().map { it.map { entity -> entity.toModel() } }
 
     override fun getHabits(type: HabitType): LiveData<List<HabitModel>> =
         habitsDao.getAll(type).map { it.map { entity -> entity.toModel() } }
@@ -35,19 +24,19 @@ class HabitRepository(private val habitsDao: HabitDao) : IHabitRepository {
     override fun getHabit(id: Int): LiveData<HabitModel> =
         habitsDao.getHabit(id).map { it?.toModel() }
 
-    private fun updateHabit(habitModel: HabitModel) {
-        habitsDao.update(HabitEntity.fromModel(habitModel))
+    override suspend fun updateHabit(habit: HabitModel) {
+        habitsDao.update(HabitEntity.fromModel(habit))
     }
 
-    override fun deleteHabit(id: Int) {
-        habitsDao.delete(id)
+    override suspend fun deleteHabit(habit: HabitModel) {
+        habitsDao.delete(HabitEntity.fromModel(habit))
     }
 
-    private fun addHabit(habitModel: HabitModel) {
-        habitsDao.insert(HabitEntity.fromModel(habitModel))
+    override suspend fun createHabit(habit: HabitModel) {
+        habitsDao.insert(HabitEntity.fromModel(habit))
     }
 
-    private fun addRandomHabits() {
+    private suspend fun addRandomHabits() {
         (0..20).forEach {
             val type = if (it % 2 == 0) {
                 HabitType.GOOD
@@ -64,11 +53,11 @@ class HabitRepository(private val habitsDao: HabitDao) : IHabitRepository {
                 type = type,
                 priority = HabitPriority.HIGH
             )
-            addHabit(habit)
+            createHabit(habit)
         }
     }
 
-    private fun deleteAll() {
+    private suspend fun deleteAll() {
         habitsDao.deleteAll()
     }
 }

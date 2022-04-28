@@ -27,9 +27,13 @@
     <string name="sort_by_name_title">Sort by name</string>
     <string name="search_by_name_title">Search by name</string>
 
+
     <string-array name="priorities">
         <item>Low</item>
         <item>Medium</item>
         <item>High</item>
     </string-array>
+
+    <string name="database_name">"habits_database"</string>
+
 </resources>

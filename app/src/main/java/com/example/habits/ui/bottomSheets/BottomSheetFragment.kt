@@ -13,7 +13,7 @@ import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitType
 import com.example.habits.ui.habits.HabitsViewModel
 import com.example.habits.utils.App
-import com.example.habits.utils.ViewModelFactory
+import com.example.habits.utils.HabitsViewModelFactory
 
 class BottomSheetFragment : Fragment() {
 
@@ -33,12 +33,12 @@ class BottomSheetFragment : Fragment() {
 
         viewModelGood = ViewModelProvider(
             requireActivity(),
-            ViewModelFactory((requireActivity().application as App).repository)
+            HabitsViewModelFactory((requireActivity().application as App).repository)
         )[HabitType.GOOD.name, HabitsViewModel::class.java]
 
         viewModelBad = ViewModelProvider(
             requireActivity(),
-            ViewModelFactory((requireActivity().application as App).repository)
+            HabitsViewModelFactory((requireActivity().application as App).repository)
         )[HabitType.BAD.name, HabitsViewModel::class.java]
     }
 
