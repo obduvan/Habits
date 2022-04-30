@@ -2,6 +2,7 @@ package com.example.habits.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.util.*
 
 @Parcelize
 data class HabitModel(
@@ -14,27 +15,3 @@ data class HabitModel(
     var type: HabitType,
     var priority: HabitPriority,
 ) : Parcelable
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -12,7 +12,7 @@ interface IHabitRepository {
 
     fun getHabit(id: Int): LiveData<HabitModel>
 
-    suspend fun createHabit(habit: HabitModel)
+    suspend fun saveHabit(habit: HabitModel, isNewHabit: Boolean)
 
     suspend fun updateHabit(habit: HabitModel)
 

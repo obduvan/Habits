@@ -1,11 +1,8 @@
 package com.example.habits.ui.editHabit
 
 
-import android.app.WallpaperManager
 import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +10,6 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.habits.R
 import com.example.habits.databinding.FragmentEditHabitBinding
@@ -21,13 +17,20 @@ import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitPriority
 import com.example.habits.model.HabitType
 import com.example.habits.ui.editHabit.views.ColorWorker
-import com.example.habits.ui.editHabit.views.OnColorSelectedListener
-import com.example.habits.ui.habits.HabitsViewModel
 import com.example.habits.ui.habits.KEY_POSITION
 import com.example.habits.utils.App
 import com.example.habits.utils.HabitsViewModelFactory
 
-class EditHabitFragment : Fragment() {
+
+interface ShowingMessage {
+    fun showMessage(message: String)
+}
+
+interface Navigator {
+    fun onSave()
+}
+
+class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
 
     private var _binding: FragmentEditHabitBinding? = null
     private val binding
@@ -36,24 +39,19 @@ class EditHabitFragment : Fragment() {
         )
 
     private var colorWorker: ColorWorker? = null
-    private var position: Int = -1
+    private var idHabit: Int = 0
 
     private val isNewHabit: Boolean
-        get() = position == -1
+        get() = idHabit == 0
 
-    private val viewModel: EditHabitViewModel by viewModels{ HabitsViewModelFactory((requireActivity().application as App).repository)}
-//    private lateinit var viewModel: EditHabitViewModel
+    private val viewModel: EditHabitViewModel by viewModels { HabitsViewModelFactory((requireActivity().application as App).repository) }
 
-    private var colorListener = object : OnColorSelectedListener {
-        override fun onColorSelected(color: Int) {
-//            viewModel.setColor(color)
-        }
-    }
+//    private var viewModel: EditHabitViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        position = arguments?.getInt(KEY_POSITION, position) ?: position
-
+        idHabit = arguments?.getInt(KEY_POSITION, idHabit) ?: idHabit
+//
 //        viewModel = ViewModelProvider(
 //            requireActivity(),
 //            HabitsViewModelFactory((requireActivity().application as App).repository)
@@ -77,23 +75,22 @@ class EditHabitFragment : Fragment() {
             binding.selectedColor,
             binding.grbColor,
             binding.hsvColor,
-            colorListener
         )
+        viewModel.setShowingMessage(this)
+        viewModel.setNavigator(this)
 
-        if (!isNewHabit) {
-            viewModel.loadHabit(position)
-            viewModel.habit.observe(viewLifecycleOwner) {
-                initViews(it)
-            }
+        if (!isNewHabit){
+            viewModel.loadHabit(idHabit)
         }
 
+        viewModel.habit.observe(viewLifecycleOwner) { initViews(it) }
         binding.buttonSave.setOnClickListener { onSaveButtonClicked() }
     }
 
-    //    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        viewModel.saveStateHabit(habitModel = getHabitModel())
-//    }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        viewModel.saveState(habitModel = getHabitModel())
+    }
 
     private fun initViews(habit: HabitModel) {
         with(habit) {
@@ -103,8 +100,8 @@ class EditHabitFragment : Fragment() {
                 b.countRepeats.setText(setNumberView(countRepeats))
                 b.interval.setText(setNumberView(interval))
                 b.selectedColor.setCardBackgroundColor(color)
-                colorWorker?.setSelectedColor(color)
 
+                colorWorker?.setSelectedColor(color)
                 b.prioritySpinner.setSelection(priority.ordinal)
                 (b.types.getChildAt(type.ordinal) as RadioButton).isChecked = true
                 (b.types.getChildAt((type.ordinal + 1) % HabitType.values().size) as RadioButton).isChecked =
@@ -113,59 +110,13 @@ class EditHabitFragment : Fragment() {
         }
     }
 
-    private fun setNumberView(number: Int): String {
-        return if (number == 0) {
-            ""
-        } else {
-            number.toString()
-        }
-    }
-
     private fun onSaveButtonClicked() {
-        val emptyEditText = getEmptyEditText()
-        val incorrectNumber = getIncorrectNumber()
-
-        when {
-            emptyEditText != null -> showToast("$emptyEditText is empty")
-            incorrectNumber != null -> showToast("$incorrectNumber is incorrect")
-            colorWorker == null -> showToast("Color error")
-            else -> saveHabit()
-        }
-    }
-
-    private fun getEmptyEditText(): CharSequence? {
-        return when (true) {
-            isEmptyText(binding.name.text) -> binding.name.hint
-            isEmptyText(binding.countRepeats.text) -> binding.countRepeats.hint
-            isEmptyText(binding.interval.text) -> binding.interval.hint
-            else -> null
-        }
-    }
-
-    private fun getIncorrectNumber(): CharSequence? {
-        return when (true) {
-            !isValidNumber(binding.countRepeats.text) -> binding.countRepeats.hint
-            !isValidNumber(binding.interval.text) -> binding.interval.hint
-            else -> null
-        }
-    }
-
-    private fun isValidNumber(text: Editable?): Boolean {
-        return text != null && text.isNotEmpty() && text[0] != '0'
-    }
-
-    private fun isEmptyText(text: Editable?): Boolean {
-        return text?.trim()?.isEmpty() ?: true
-    }
-
-    private fun showToast(name: String) {
-        Toast.makeText(requireContext(), name, Toast.LENGTH_SHORT).show()
+        viewModel.onSaveClicked(habitModel = getHabitModel(), isNewHabit)
     }
 
     private fun getHabitModel(): HabitModel {
-
         return HabitModel(
-            id = position,
+            id = idHabit,
             name = binding.name.text.toString(),
             description = binding.description.text.toString(),
             color = colorWorker?.getSelectedColor() ?: Color.WHITE,
@@ -178,9 +129,12 @@ class EditHabitFragment : Fragment() {
         )
     }
 
-    private fun saveHabit() {
-        viewModel.saveHabit(habitModel = getHabitModel(), isNewHabit)
-        findNavController().popBackStack()
+    private fun setNumberView(number: Int): String {
+        return if (number == 0) {
+            ""
+        } else {
+            number.toString()
+        }
     }
 
     private fun getSelectedType(): HabitType {
@@ -190,8 +144,17 @@ class EditHabitFragment : Fragment() {
         }
     }
 
+    override fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSave() {
+        findNavController().popBackStack()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        viewModel.onDestroyView()
     }
 }

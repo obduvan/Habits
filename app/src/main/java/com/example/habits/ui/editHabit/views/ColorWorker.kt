@@ -19,7 +19,6 @@ class ColorWorker(
     private val selectedColorView: MaterialCardView,
     private val rgbText: TextView,
     private val hsvTextView: TextView,
-    private val onColorSelectedListener: OnColorSelectedListener,
 ) :
     OnColorListener {
 
@@ -69,8 +68,6 @@ class ColorWorker(
     override fun onColorClick(position: Int) {
         selectedColor = colors[position]
         setColorInfo(selectedColor)
-
-        onColorSelectedListener.onColorSelected(selectedColor)
     }
 
     private fun setColorInfo(color: Int) {

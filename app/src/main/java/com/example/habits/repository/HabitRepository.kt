@@ -1,7 +1,6 @@
 package com.example.habits.repository
 
 import android.graphics.Color
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitPriority
@@ -9,12 +8,9 @@ import com.example.habits.model.HabitType
 import com.example.habits.room.HabitDao
 import com.example.habits.room.HabitEntity
 import com.example.habits.utils.map
-import kotlinx.coroutines.delay
-import java.lang.Thread.sleep
 
 
 class HabitRepository(private val habitsDao: HabitDao) : IHabitRepository {
-
 
     override val habits = habitsDao.getAll().map { it.map { entity -> entity.toModel() } }
 
@@ -32,8 +28,12 @@ class HabitRepository(private val habitsDao: HabitDao) : IHabitRepository {
         habitsDao.delete(HabitEntity.fromModel(habit))
     }
 
-    override suspend fun createHabit(habit: HabitModel) {
-        habitsDao.insert(HabitEntity.fromModel(habit))
+    override suspend fun saveHabit(habit: HabitModel, isNewHabit: Boolean) {
+        if (isNewHabit) {
+            habitsDao.insert(HabitEntity.fromModel(habit))
+        } else {
+            habitsDao.update(HabitEntity.fromModel(habit))
+        }
     }
 
     private suspend fun addRandomHabits() {
@@ -53,7 +53,7 @@ class HabitRepository(private val habitsDao: HabitDao) : IHabitRepository {
                 type = type,
                 priority = HabitPriority.HIGH
             )
-            createHabit(habit)
+            saveHabit(habit, isNewHabit = true)
         }
     }
 
