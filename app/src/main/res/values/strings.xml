@@ -28,6 +28,10 @@
     <string name="search_by_name_title">Search by name</string>
 
 
+    <string name="error_empty_habit">Habit is empty</string>
+    <string name="error_repeats_incorrect">Number of repeats is incorrect</string>
+    <string name="error_interval">Interval in days between executions is incorrect</string>
+
     <string-array name="priorities">
         <item>Low</item>
         <item>Medium</item>

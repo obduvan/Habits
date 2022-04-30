@@ -1,8 +1,10 @@
 package com.example.habits.ui.editHabit
 
 import androidx.lifecycle.*
+import com.example.habits.R
 import com.example.habits.model.HabitModel
 import com.example.habits.repository.IHabitRepository
+import com.example.habits.utils.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -46,9 +48,9 @@ class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel()
 
     private fun getErrorTitle(habit: HabitModel): String? {
         return when (true) {
-            isEmptyText(habit.name) -> "Habit is empty"
-            isIncorrectRange(habit.countRepeats) -> "Number of repeats is incorrect"
-            isIncorrectRange(habit.interval) -> "Interval in days between executions is incorrect"
+            isEmptyText(habit.name) -> App.getContext()?.getString(R.string.error_empty_habit)
+            isIncorrectRange(habit.countRepeats) -> App.getContext()?.getString(R.string.error_repeats_incorrect)
+            isIncorrectRange(habit.interval) -> App.getContext()?.getString(R.string.error_interval)
             else -> null
         }
     }
