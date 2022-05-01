@@ -33,6 +33,17 @@ class BottomSheetFragment : Fragment() {
     private lateinit var viewModelGood: HabitsViewModel
     private lateinit var viewModelBad: HabitsViewModel
 
+    private val textWatcher = object : TextWatcher {
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+        override fun afterTextChanged(p0: Editable?) {}
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            val filter = p0.toString()
+            viewModelGood.setFilter(filter)
+            viewModelBad.setFilter(filter)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,26 +70,22 @@ class BottomSheetFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.searchByName.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val filter = p0.toString()
-                viewModelGood.setFilter(filter)
-                viewModelBad.setFilter(filter)
-            }
-        })
+        binding.searchByName.addTextChangedListener(textWatcher)
 
         binding.switcherSortByName.setOnCheckedChangeListener { _, isChecked ->
-            var comparator = HabitComparator.emptyComparator
-            if (isChecked) {
-                comparator = HabitComparator.nameComparator
-            }
-            viewModelGood.setComparator(comparator)
-            viewModelBad.setComparator(comparator)
+            setComparator(isChecked)
         }
     }
+
+    private fun setComparator(isChecked: Boolean) {
+        var comparator = HabitComparator.emptyComparator
+        if (isChecked) {
+            comparator = HabitComparator.nameComparator
+        }
+        viewModelGood.setComparator(comparator)
+        viewModelBad.setComparator(comparator)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

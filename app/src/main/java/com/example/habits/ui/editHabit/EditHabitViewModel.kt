@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class ValidationResult(
     val isSuccessful: Boolean,
-    val error: String? = null,
+    val error: String? = null
 )
 
 class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel() {

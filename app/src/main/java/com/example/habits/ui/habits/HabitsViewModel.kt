@@ -21,9 +21,9 @@ class HabitsViewModel(private val repository: IHabitRepository) : ViewModel() {
         .map { (pairLiveData, comparator) ->
             val habits = pairLiveData?.first ?: listOf()
             val filter = pairLiveData?.second ?: ""
-            val habitComparator = comparator ?: HabitComparator.emptyComparator
+            val selectedComparator = comparator ?: HabitComparator.emptyComparator
 
-            habits.filter { it.name.contains(filter) }.sortedWith(habitComparator)
+            habits.filter { it.name.contains(filter) }.sortedWith(selectedComparator)
         }
 
     fun setFilter(mFilter: String) {
