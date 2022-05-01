@@ -8,19 +8,23 @@ import com.example.habits.utils.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+class ValidationResult(
+    val isSuccessful: Boolean,
+    val error: String? = null,
+)
+
 class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel() {
 
-    private val _habit = MutableLiveData<HabitModel>()
-    val habit: LiveData<HabitModel> = _habit
+    private var _habit = MutableLiveData<HabitModel>()
+    var habit: LiveData<HabitModel> = _habit
 
     private var showingMessage: ShowingMessage? = null
     private var navigator: Navigator? = null
 
     fun loadHabit(id: Int) {
         if (habit.value?.id != id) {
-            repository.habits.value?.firstOrNull { it.id == id }?.let { habit ->
-                _habit.postValue(habit)
-            }
+            _habit = repository.getHabit(id) as MutableLiveData<HabitModel>
+            habit = _habit
         }
     }
 
@@ -29,11 +33,13 @@ class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel()
     }
 
     fun onSaveClicked(habitModel: HabitModel, isNewHabit: Boolean) {
-        val errorTitle = getErrorTitle(habitModel)
+        val validationResult = getErrorTitle(habitModel)
 
-        when {
-            errorTitle != null -> showingMessage?.showMessage(errorTitle)
-            else -> {
+        when (validationResult.isSuccessful) {
+            false -> validationResult.error?.let {
+                showingMessage?.showMessage(it)
+            }
+            true -> {
                 navigator?.onSave()
                 saveHabit(habitModel, isNewHabit)
             }
@@ -46,12 +52,20 @@ class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel()
         }
     }
 
-    private fun getErrorTitle(habit: HabitModel): String? {
+    private fun getErrorTitle(habit: HabitModel): ValidationResult {
+        val context = App.getContext()
+
         return when (true) {
-            isEmptyText(habit.name) -> App.getContext()?.getString(R.string.error_empty_habit)
-            isIncorrectRange(habit.countRepeats) -> App.getContext()?.getString(R.string.error_repeats_incorrect)
-            isIncorrectRange(habit.interval) -> App.getContext()?.getString(R.string.error_interval)
-            else -> null
+            isEmptyText(habit.name) -> ValidationResult(
+                false, context?.getString(R.string.error_empty_habit)
+            )
+            isIncorrectRange(habit.countRepeats) -> ValidationResult(
+                false, context?.getString(R.string.error_repeats_incorrect)
+            )
+            isIncorrectRange(habit.interval) -> ValidationResult(
+                false, context?.getString(R.string.error_interval)
+            )
+            else -> ValidationResult(true)
         }
     }
 

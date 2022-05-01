@@ -20,10 +20,10 @@ interface HabitDao {
     suspend fun delete(habit: HabitEntity)
 
     @Update
-    fun update(habit: HabitEntity)
+    suspend fun update(habit: HabitEntity)
 
     @Insert
-    fun insert(habit: HabitEntity)
+    suspend fun insert(habit: HabitEntity)
 
     @Query("delete from Habits")
     suspend fun deleteAll()

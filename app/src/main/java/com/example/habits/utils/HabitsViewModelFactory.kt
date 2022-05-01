@@ -7,16 +7,12 @@ import com.example.habits.ui.editHabit.EditHabitViewModel
 import com.example.habits.ui.habits.HabitsViewModel
 
 class HabitsViewModelFactory(private val habitRepository: IHabitRepository) : ViewModelProvider.Factory {
-//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//        TODO("Not yet implemented")
-//    }
-
-
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val viewModel = when (modelClass) {
             HabitsViewModel::class.java -> {
                 HabitsViewModel(habitRepository)
             }
+
             EditHabitViewModel::class.java -> {
                 EditHabitViewModel(habitRepository)
             }
@@ -26,4 +22,3 @@ class HabitsViewModelFactory(private val habitRepository: IHabitRepository) : Vi
         return viewModel as T
     }
 }
-

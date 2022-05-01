@@ -79,7 +79,7 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
         viewModel.setShowingMessage(this)
         viewModel.setNavigator(this)
 
-        if (!isNewHabit){
+        if (!isNewHabit) {
             viewModel.loadHabit(idHabit)
         }
 
@@ -146,6 +146,7 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
 
     override fun showMessage(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+
     }
 
     override fun onSave() {

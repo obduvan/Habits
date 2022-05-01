@@ -57,7 +57,7 @@ class HabitRepository(private val habitsDao: HabitDao) : IHabitRepository {
         }
     }
 
-    private suspend fun deleteAll() {
+    suspend fun deleteAll() {
         habitsDao.deleteAll()
     }
 }
