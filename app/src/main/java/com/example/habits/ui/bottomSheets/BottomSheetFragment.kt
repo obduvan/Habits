@@ -15,18 +15,23 @@ import com.example.habits.ui.habits.HabitsViewModel
 import com.example.habits.utils.App
 import com.example.habits.utils.HabitsViewModelFactory
 
-class BottomSheetFragment : Fragment() {
+class HabitComparator {
+    companion object {
+        val emptyComparator = Comparator { _: HabitModel, _: HabitModel -> 0 }
+        val nameComparator =
+            Comparator { h1: HabitModel, h2: HabitModel -> h1.name.compareTo(h2.name) }
+    }
+}
 
+class BottomSheetFragment : Fragment() {
     private var _binding: FragmentBottomSheetBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException(
             "Binding is only valid between onCreateView and onDestroyView."
         )
+
     private lateinit var viewModelGood: HabitsViewModel
     private lateinit var viewModelBad: HabitsViewModel
-
-    private val nameComparator =
-        Comparator { h1: HabitModel, h2: HabitModel -> h1.name.compareTo(h2.name) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,9 +70,13 @@ class BottomSheetFragment : Fragment() {
             }
         })
 
-        binding.switcherSortByName.setOnClickListener {
-            viewModelGood.setComparator(nameComparator)
-            viewModelBad.setComparator(nameComparator)
+        binding.switcherSortByName.setOnCheckedChangeListener { _, isChecked ->
+            var comparator = HabitComparator.emptyComparator
+            if (isChecked) {
+                comparator = HabitComparator.nameComparator
+            }
+            viewModelGood.setComparator(comparator)
+            viewModelBad.setComparator(comparator)
         }
     }
 

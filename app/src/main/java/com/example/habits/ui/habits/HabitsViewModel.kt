@@ -1,28 +1,27 @@
 package com.example.habits.ui.habits
 
-import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.habits.model.HabitModel
 import com.example.habits.model.HabitType
 import com.example.habits.repository.IHabitRepository
+import com.example.habits.ui.bottomSheets.HabitComparator
 import com.example.habits.utils.addLiveData
 import com.example.habits.utils.map
 
 class HabitsViewModel(private val repository: IHabitRepository) : ViewModel() {
+
     private var filter = MutableLiveData("")
-
-    private val emptyComparator = Comparator { _: HabitModel, _: HabitModel -> 0 }
-
-    private var comparator = MutableLiveData<Comparator<HabitModel>>()
-    private var isSorted = false
+    private var habitComparator = MutableLiveData<Comparator<HabitModel>>()
 
     private val habitList: LiveData<List<HabitModel>> = repository.habits
         .addLiveData(filter)
-        .addLiveData(comparator)
+        .addLiveData(habitComparator)
         .map { (pair, comparator) ->
             val habits = pair?.first ?: listOf()
             val filter = pair?.second ?: ""
-            val habitComparator = comparator ?: emptyComparator
+            val habitComparator = comparator ?: HabitComparator.emptyComparator
 
             habits.filter { it.name.contains(filter) }.sortedWith(habitComparator)
         }
@@ -35,15 +34,7 @@ class HabitsViewModel(private val repository: IHabitRepository) : ViewModel() {
         return habitList.map { it.filter { habitModel -> habitModel.type == type } }
     }
 
-    fun setComparator(mComparator: Comparator<HabitModel>) {
-        isSorted = !isSorted
-
-        comparator.postValue(
-            if (isSorted) {
-                mComparator
-            } else {
-                emptyComparator
-            }
-        )
+    fun setComparator(comparator: Comparator<HabitModel>) {
+        this.habitComparator.postValue(comparator)
     }
 }
