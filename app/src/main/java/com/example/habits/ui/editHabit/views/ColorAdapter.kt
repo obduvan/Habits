@@ -1,4 +1,4 @@
-package com.example.habits.ui.views
+package com.example.habits.ui.editHabit.views
 
 import android.view.LayoutInflater
 import android.view.View

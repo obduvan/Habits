@@ -4,19 +4,17 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/dddd"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white_bright"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context=".ui.EditHabitActivity">
+    tools:context=".ui.editHabit.EditHabitFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-       >
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_left"
@@ -93,6 +91,7 @@
                 android:layout_height="50dp"
                 android:hint="@string/repeats"
                 android:inputType="number"
+
                 android:maxLength="9"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -111,6 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
+
                 android:hint="@string/habit_interval"
                 android:inputType="number"
                 android:maxLength="9"
@@ -121,17 +121,18 @@
         <View
             android:layout_width="0dp"
             android:layout_height="50dp"
+            android:layout_marginStart="10dp"
+
             android:background="@drawable/grey_alto_edge"
-            app:layout_constraintEnd_toEndOf="@id/guideline_right"
-            app:layout_constraintStart_toStartOf="@id/guideline_left"
-            app:layout_constraintBottom_toBottomOf="@+id/priority_spinner"
-            app:layout_constraintTop_toTopOf="@+id/priority_name" />
+            app:layout_constraintEnd_toEndOf="@id/priority_spinner"
+            app:layout_constraintStart_toStartOf="@id/priority_spinner"
+            app:layout_constraintTop_toTopOf="@id/priority_spinner" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/priority_name"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginVertical="20dp"
+            android:layout_height="40dp"
+            android:layout_marginVertical="10dp"
             android:fontFamily="@font/roboto_regular"
             android:gravity="center"
             android:paddingHorizontal="10dp"
@@ -143,20 +144,21 @@
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/priority_spinner"
-            style="?attr/spinnerDropDownItemStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:entries="@array/priorities"
+            android:paddingHorizontal="16dp"
             android:popupBackground="@drawable/solid_white_edge"
             app:layout_constraintEnd_toEndOf="@id/guideline_right"
-            app:layout_constraintTop_toTopOf="@id/priority_name" />
+            app:layout_constraintStart_toEndOf="@id/guideline_left"
+            app:layout_constraintTop_toBottomOf="@id/priority_name" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/type_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
             android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="20dp"
             android:text="@string/habit_type"
             android:textColor="@color/black"
             android:textSize="16sp"
@@ -168,8 +170,9 @@
             android:id="@+id/types"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginHorizontal="35dp"
+            android:orientation="horizontal"
+            android:checkedButton="@id/good_type"
             app:layout_constraintStart_toStartOf="@id/type_name"
             app:layout_constraintTop_toBottomOf="@id/type_name">
 
@@ -187,6 +190,7 @@
                 android:layout_weight="1"
                 android:text="@string/habit_type_bad" />
         </RadioGroup>
+
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/selected_color"
@@ -233,9 +237,11 @@
                     android:layout_gravity="center_vertical"
                     android:elevation="20dp"
                     android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="@id/rv_background"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/rv_background" />
+                    app:layout_constraintTop_toTopOf="@id/rv_background"
+                    tools:listitem="@layout/color_view" />
 
                 <View
                     android:id="@+id/rv_background"
@@ -254,7 +260,7 @@
             android:layout_marginTop="10dp"
             android:text="@string/save"
             android:textAllCaps="false"
-            android:textSize="16sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/sv_colors" />
