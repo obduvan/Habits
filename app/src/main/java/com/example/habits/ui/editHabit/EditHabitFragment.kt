@@ -146,7 +146,6 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
 
     override fun showMessage(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-
     }
 
     override fun onSave() {

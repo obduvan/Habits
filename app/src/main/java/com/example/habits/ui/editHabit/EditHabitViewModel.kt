@@ -36,8 +36,8 @@ class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel()
         val validationResult = getErrorTitle(habitModel)
 
         when (validationResult.isSuccessful) {
-            false -> validationResult.error?.let {
-                showingMessage?.showMessage(it)
+            false -> validationResult.error?.let { error ->
+                showingMessage?.showMessage(error)
             }
             true -> {
                 navigator?.onSave()
