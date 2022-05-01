@@ -16,6 +16,10 @@ class ValidationResult(
 class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel() {
 
     private var _habit = MutableLiveData<HabitModel>()
+        set(value) {
+            field = value
+            habit = value
+        }
     var habit: LiveData<HabitModel> = _habit
 
     private var showingMessage: ShowingMessage? = null
@@ -24,7 +28,6 @@ class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel()
     fun loadHabit(id: Int) {
         if (habit.value?.id != id) {
             _habit = repository.getHabit(id) as MutableLiveData<HabitModel>
-            habit = _habit
         }
     }
 

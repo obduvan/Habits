@@ -86,7 +86,6 @@ class BottomSheetFragment : Fragment() {
         viewModelBad.setComparator(comparator)
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
