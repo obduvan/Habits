@@ -25,19 +25,3 @@ class AuthInterceptor : Interceptor {
         return chain.proceed(newRequest)
     }
 }
-
-class RetryInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request: Request = chain.request()
-        var response = chain.proceed(request)
-
-        var tryCount = 0
-        while (!response.isSuccessful) {
-            Log.i(RetryInterceptor::class.java.name, "Request is not successful - $tryCount")
-            tryCount += 1
-
-            response = chain.proceed(request)
-        }
-        return response
-    }
-}
