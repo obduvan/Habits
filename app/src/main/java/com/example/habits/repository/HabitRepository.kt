@@ -9,6 +9,7 @@ import com.example.habits.model.HabitType
 import com.example.habits.model.HabitUid
 import com.example.habits.net.ApiResponse
 import com.example.habits.net.DTO.HabitDTO
+import com.example.habits.net.DTO.HabitUidDTO
 import com.example.habits.net.NetworkClient
 import com.example.habits.net.retryRequest
 import com.example.habits.room.HabitDao
@@ -55,8 +56,14 @@ class HabitRepository(private val habitsDao: HabitDao) : IHabitRepository {
         }
     }
 
-    override suspend fun deleteHabit(habit: HabitModel) {
-        habitsDao.delete(HabitEntity.fromModel(habit))
+    override suspend fun deleteHabit(habit: HabitModel): ApiResponse<Unit> {
+        return try {
+            retryRequest { NetworkClient.habitAPI.deleteHabit(HabitUidDTO(habit.id)) }
+            habitsDao.delete(HabitEntity.fromModel(habit))
+            ApiResponse.Success(data = Unit)
+        } catch (e: RuntimeException) {
+            handleErrors(e)
+        }
     }
 
     override suspend fun saveHabit(habit: HabitModel, isNewHabit: Boolean): ApiResponse<HabitUid> {

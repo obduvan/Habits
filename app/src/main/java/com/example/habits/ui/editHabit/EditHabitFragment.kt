@@ -31,7 +31,7 @@ interface ShowingMessage {
 }
 
 interface Navigator {
-    fun onSave()
+    fun popBackStacl()
 }
 
 class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
@@ -85,15 +85,21 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
 
         if (!isNewHabit) {
             viewModel.loadHabit(idHabit)
+            initDeleteButton()
         }
 
         viewModel.habit.observe(viewLifecycleOwner) { habit -> habit?.let { initViews(it) } }
         binding.buttonSave.setOnClickListener { onSaveButtonClicked() }
+        binding.buttonDelete.setOnClickListener { onDeleteButtonClicked() }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         viewModel.saveState(habitModel = getHabitModel())
+    }
+
+    private fun initDeleteButton() {
+        binding.buttonDelete.setBackgroundColor(requireContext().getColor(R.color.red2))
     }
 
     private fun initViews(habit: HabitModel) {
@@ -116,6 +122,14 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
 
     private fun onSaveButtonClicked() {
         viewModel.onSaveClicked(habitModel = getHabitModel(), isNewHabit)
+    }
+
+    private fun onDeleteButtonClicked() {
+        if (isNewHabit) {
+            showMessage("It's new habit.")
+        } else {
+            viewModel.deleteHabit(getHabitModel())
+        }
     }
 
     private fun getHabitModel(): HabitModel {
@@ -153,7 +167,7 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onSave() {
+    override fun popBackStacl() {
         findNavController().popBackStack()
     }
 

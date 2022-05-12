@@ -39,5 +39,6 @@
 
     <string name="database_name">"habits_database"</string>
     <string name="avatar">avatar</string>
+    <string name="delete">Delete</string>
 
 </resources>

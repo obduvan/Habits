@@ -15,5 +15,5 @@ interface IHabitRepository {
 
     suspend fun saveHabit(habit: HabitModel, isNewHabit: Boolean): ApiResponse<HabitUid>
 
-    suspend fun deleteHabit(habit: HabitModel)
+    suspend fun deleteHabit(habit: HabitModel): ApiResponse<Unit>
 }

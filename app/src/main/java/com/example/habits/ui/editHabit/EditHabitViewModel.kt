@@ -1,6 +1,5 @@
 package com.example.habits.ui.editHabit
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.habits.R
 import com.example.habits.model.HabitModel
@@ -43,7 +42,7 @@ class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel()
             val response =
                 withContext(Dispatchers.IO) { repository.saveHabit(habitModel, isNewHabit) }
             if (response is ApiResponse.Success) {
-                navigator?.onSave()
+                navigator?.popBackStacl()
             }
             if (response is ApiResponse.Error) {
                 showingMessage?.showMessage("Can't connect to server.")
@@ -100,5 +99,19 @@ class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel()
     fun onDestroyView() {
         showingMessage = null
         navigator = null
+    }
+
+    fun deleteHabit(habitModel: HabitModel) {
+        viewModelScope.launch {
+            val apiResponse = repository.deleteHabit(habitModel)
+
+            if (apiResponse is ApiResponse.Error) {
+                showingMessage?.showMessage("Server error")
+            }
+            if (apiResponse is ApiResponse.Success){
+                navigator?.popBackStacl()
+            }
+        }
+
     }
 }
