@@ -23,6 +23,7 @@ class HabitComparator {
     }
 }
 
+
 class BottomSheetFragment : Fragment() {
     private var _binding: FragmentBottomSheetBinding? = null
     private val binding

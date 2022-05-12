@@ -27,10 +27,9 @@
     <string name="sort_by_name_title">Sort by name</string>
     <string name="search_by_name_title">Search by name</string>
 
-
     <string name="error_empty_habit">Habit is empty</string>
-    <string name="error_repeats_incorrect">Number of repeats is incorrect</string>
-    <string name="error_interval">Interval in days between executions is incorrect</string>
+    <string name="error_repeats_incorrect">Number of repeats must be greater than zero</string>
+    <string name="error_interval">Frequency must be greater than zero</string>
 
     <string-array name="priorities">
         <item>Low</item>
@@ -39,5 +38,6 @@
     </string-array>
 
     <string name="database_name">"habits_database"</string>
+    <string name="avatar">avatar</string>
 
 </resources>

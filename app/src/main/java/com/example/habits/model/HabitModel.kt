@@ -6,10 +6,11 @@ import java.util.*
 
 @Parcelize
 data class HabitModel(
-    var id: Int,
+    var id: String,
     var name: String,
     var description: String,
     var color: Int,
+    var date: Int,
     var countRepeats: Int,
     var interval: Int,
     var type: HabitType,

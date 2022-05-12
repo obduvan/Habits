@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.habits.R
 import com.example.habits.databinding.FragmentHabitsBinding
 import com.example.habits.model.HabitType
+import com.example.habits.ui.editHabit.ShowingMessage
 import com.example.habits.utils.App
 import com.example.habits.utils.HabitsViewModelFactory
 
@@ -33,6 +35,12 @@ class HabitsFragment : Fragment(), OnHabitListener {
         get() = _binding ?: throw IllegalStateException(
             "Binding is only valid between onCreateView and onDestroyView."
         )
+
+    private val showingMessage = object : ShowingMessage {
+        override fun showMessage(message: String) {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     companion object {
         private const val KEY_TYPE_HABITS = "TYPE"
@@ -58,6 +66,8 @@ class HabitsFragment : Fragment(), OnHabitListener {
                 HabitsViewModelFactory((requireActivity().application as App).repository)
             )[type.name, HabitsViewModel::class.java]
         }
+        viewModel.loadHabits()
+
 
         _binding = FragmentHabitsBinding.inflate(inflater, container, false)
         return binding.root
@@ -69,7 +79,7 @@ class HabitsFragment : Fragment(), OnHabitListener {
 
         recyclerView = binding.habitsRecycler
         recyclerView.setHasFixedSize(true)
-
+        viewModel.setShowingMessage(showingMessage)
         with(recyclerView) {
             layoutManager = LinearLayoutManager(context)
             adapter = adapterHabit
@@ -83,7 +93,7 @@ class HabitsFragment : Fragment(), OnHabitListener {
         }
     }
 
-    override fun onHabitClick(position: Int) {
+    override fun onHabitClick(position: String) {
         findNavController().navigate(
             R.id.action_navigation_habits_to_navigation_edit_habit,
             bundleOf(KEY_POSITION to position)

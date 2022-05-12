@@ -15,7 +15,7 @@ import com.example.habits.model.HabitType
 
 
 interface OnHabitListener {
-    fun onHabitClick(position: Int)
+    fun onHabitClick(position: String)
 }
 
 class HabitAdapter(private val onHabitListener: OnHabitListener) :
@@ -38,6 +38,7 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(habitModel: HabitModel) {
+
             with(habitModel) {
                 binding.color.setBackgroundColor(color)
                 binding.habitDescription.text = description
@@ -51,10 +52,8 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
                     HabitPriority.MEDIUM -> itemView.context.getColor(R.color.polo_blue)
                     HabitPriority.LOW -> itemView.context.getColor(R.color.dusty_grey)
                 }
-
-                itemView.setOnClickListener { onHabitListener.onHabitClick(id) }
-
                 binding.habitPriority.setTextColor(colorPriority)
+
 
                 if (interval == 1) {
                     binding.days.text = itemView.context.getString(R.string.day)
@@ -65,6 +64,8 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
                 } else {
                     binding.cardType.setCardBackgroundColor(itemView.context.getColor(R.color.pink_cavern))
                 }
+
+                itemView.setOnClickListener { onHabitListener.onHabitClick(id) }
             }
         }
     }

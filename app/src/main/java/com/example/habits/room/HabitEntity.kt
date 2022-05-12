@@ -9,16 +9,16 @@ import java.util.*
 
 @Entity(tableName = "Habits")
 data class HabitEntity(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int,
+    @PrimaryKey
+    var id: String,
     var name: String,
     var description: String,
     var color: Int,
     var countRepeats: Int,
     var interval: Int,
+    var date: Int,
     var type: HabitType,
     var priority: HabitPriority,
-
 ) {
 
     companion object {
@@ -27,6 +27,7 @@ data class HabitEntity(
             name = model.name,
             description = model.description,
             color = model.color,
+            date = model.date,
             countRepeats = model.countRepeats,
             interval = model.interval,
             type = model.type,
@@ -42,7 +43,8 @@ data class HabitEntity(
         countRepeats = countRepeats,
         interval = interval,
         type = type,
-        priority = priority
+        priority = priority,
+        date = date
     )
 }
 

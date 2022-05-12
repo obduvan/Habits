@@ -20,6 +20,10 @@ import com.example.habits.ui.editHabit.views.ColorWorker
 import com.example.habits.ui.habits.KEY_POSITION
 import com.example.habits.utils.App
 import com.example.habits.utils.HabitsViewModelFactory
+import com.example.habits.utils.getIntTime
+import java.time.Instant
+import java.time.LocalTime
+import java.util.*
 
 
 interface ShowingMessage {
@@ -39,10 +43,10 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
         )
 
     private var colorWorker: ColorWorker? = null
-    private var idHabit: Int = 0
+    private var idHabit: String = ""
 
     private val isNewHabit: Boolean
-        get() = idHabit == 0
+        get() = idHabit == ""
 
     private val viewModel: EditHabitViewModel by viewModels { HabitsViewModelFactory((requireActivity().application as App).repository) }
 
@@ -50,7 +54,7 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        idHabit = arguments?.getInt(KEY_POSITION, idHabit) ?: idHabit
+        idHabit = arguments?.getString(KEY_POSITION, idHabit) ?: idHabit
 //
 //        viewModel = ViewModelProvider(
 //            requireActivity(),
@@ -83,7 +87,7 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
             viewModel.loadHabit(idHabit)
         }
 
-        viewModel.habit.observe(viewLifecycleOwner) { initViews(it) }
+        viewModel.habit.observe(viewLifecycleOwner) { habit -> habit?.let { initViews(it) } }
         binding.buttonSave.setOnClickListener { onSaveButtonClicked() }
     }
 
@@ -126,6 +130,7 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
                 binding.prioritySpinner.selectedItem.toString().uppercase()
             ),
             type = getSelectedType(),
+            date = getIntTime()
         )
     }
 

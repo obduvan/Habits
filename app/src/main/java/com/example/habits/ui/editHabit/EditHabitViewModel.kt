@@ -1,12 +1,15 @@
 package com.example.habits.ui.editHabit
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.habits.R
 import com.example.habits.model.HabitModel
+import com.example.habits.net.ApiResponse
 import com.example.habits.repository.IHabitRepository
 import com.example.habits.utils.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ValidationResult(
     val isSuccessful: Boolean,
@@ -25,7 +28,7 @@ class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel()
     private var showingMessage: ShowingMessage? = null
     private var navigator: Navigator? = null
 
-    fun loadHabit(id: Int) {
+    fun loadHabit(id: String) {
         if (habit.value?.id != id) {
             _habit = repository.getHabit(id) as MutableLiveData<HabitModel>
         }
@@ -33,6 +36,19 @@ class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel()
 
     fun saveState(habitModel: HabitModel) {
         _habit.postValue(habitModel)
+    }
+
+    private fun saveHabit(habitModel: HabitModel, isNewHabit: Boolean) {
+        viewModelScope.launch(Dispatchers.Main) {
+            val response =
+                withContext(Dispatchers.IO) { repository.saveHabit(habitModel, isNewHabit) }
+            if (response is ApiResponse.Success) {
+                navigator?.onSave()
+            }
+            if (response is ApiResponse.Error) {
+                showingMessage?.showMessage("Can't connect to server.")
+            }
+        }
     }
 
     fun onSaveClicked(habitModel: HabitModel, isNewHabit: Boolean) {
@@ -43,15 +59,8 @@ class EditHabitViewModel(private val repository: IHabitRepository) : ViewModel()
                 showingMessage?.showMessage(error)
             }
             true -> {
-                navigator?.onSave()
                 saveHabit(habitModel, isNewHabit)
             }
-        }
-    }
-
-    private fun saveHabit(habitModel: HabitModel, isNewHabit: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.saveHabit(habitModel, isNewHabit)
         }
     }
 

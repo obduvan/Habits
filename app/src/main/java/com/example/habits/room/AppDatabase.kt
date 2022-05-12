@@ -8,7 +8,7 @@ import com.example.habits.R
 
 
 @Database(
-    version = 1,
+    version = 3,
     entities = [HabitEntity::class]
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -29,7 +29,9 @@ abstract class AppDatabase : RoomDatabase() {
                         context.applicationContext,
                         AppDatabase::class.java,
                         context.getString(R.string.database_name),
-                    ).allowMainThreadQueries().build()
+                    ).allowMainThreadQueries()
+                        .fallbackToDestructiveMigration()
+                        .build()
 
                     INSTANCE = instance
                 }
