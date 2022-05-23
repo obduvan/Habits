@@ -2,9 +2,9 @@ package com.example.data.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.habits.model.HabitModel
-import com.example.habits.model.HabitPriority
-import com.example.habits.model.HabitType
+import com.example.domain.entities.HabitModel
+import com.example.domain.entities.HabitPriority
+import com.example.domain.entities.HabitType
 import java.util.*
 
 @Entity(tableName = "Habits")

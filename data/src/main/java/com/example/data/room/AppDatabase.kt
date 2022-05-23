@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.habits.R
 
 
 @Database(
@@ -28,7 +27,7 @@ abstract class AppDatabase : RoomDatabase() {
                     instance = Room.databaseBuilder(
                         context.applicationContext,
                         AppDatabase::class.java,
-                        context.getString(R.string.database_name),
+                        "habits_database",
                     ).allowMainThreadQueries()
                         .fallbackToDestructiveMigration()
                         .build()

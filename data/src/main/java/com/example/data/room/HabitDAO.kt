@@ -2,7 +2,7 @@ package com.example.data.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.habits.model.HabitType
+import com.example.domain.entities.HabitType
 
 @Dao
 interface HabitDao {
