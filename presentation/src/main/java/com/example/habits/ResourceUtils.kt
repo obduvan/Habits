@@ -19,6 +19,5 @@ class ResourceUtils {
                 HabitType.BAD -> R.string.habit_type_bad
             }
         }
-
     }
 }

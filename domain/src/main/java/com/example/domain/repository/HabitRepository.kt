@@ -1,17 +1,19 @@
 package com.example.domain.repository
 
-import androidx.lifecycle.LiveData
 import com.example.domain.ApiResponse
+import com.example.domain.entities.HabitModel
+import com.example.domain.entities.HabitUid
+import kotlinx.coroutines.flow.Flow
 
 interface HabitRepository {
 
-    val habits: LiveData<List<com.example.domain.entities.HabitModel>>
+    fun getHabits(): Flow<List<HabitModel>>
 
     suspend fun loadHabits(): ApiResponse<Unit>
 
-    fun getHabit(id: String): LiveData<com.example.domain.entities.HabitModel>
+    fun getHabit(id: String): Flow<HabitModel>
 
-    suspend fun saveHabit(habit: com.example.domain.entities.HabitModel, isNewHabit: Boolean): ApiResponse<com.example.domain.entities.HabitUid>
+    suspend fun saveHabit(habit: HabitModel, isNewHabit: Boolean): ApiResponse<HabitUid>
 
-    suspend fun deleteHabit(habit: com.example.domain.entities.HabitModel): ApiResponse<Unit>
+    suspend fun deleteHabit(habit: HabitModel): ApiResponse<Unit>
 }

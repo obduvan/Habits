@@ -1,19 +1,20 @@
-package com.example.data.room
+package com.example.data.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.domain.entities.HabitType
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HabitDao {
     @Query("select * from Habits")
-    fun getAll(): LiveData<List<HabitEntity>>
+    fun getAll(): Flow<List<HabitEntity>>
 
     @Query("select * from Habits where type == :type")
-    fun getAll(type: HabitType): LiveData<List<HabitEntity>>
+    fun getAll(type: HabitType): Flow<List<HabitEntity>>
 
     @Query("select * from Habits where id == :id")
-    fun getHabit(id: String): LiveData<HabitEntity?>
+    fun getHabit(id: String): Flow<HabitEntity>
 
     @Query("select * from Habits where id == :id")
     suspend fun checkExistHabit(id: String): HabitEntity?

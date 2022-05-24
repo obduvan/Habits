@@ -7,6 +7,7 @@ import com.example.domain.entities.HabitModel
 import com.example.domain.useCases.HabitsUseCase
 import com.example.habits.App
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -29,7 +30,8 @@ class EditHabitViewModel(private val habitsUseCase: HabitsUseCase) : ViewModel()
 
     fun loadHabit(id: String) {
         if (habit.value?.id != id) {
-            _habit = habitsUseCase.getHabit(id) as MutableLiveData<HabitModel>
+            _habit = habitsUseCase.getHabit(id)
+                .asLiveData(viewModelScope.coroutineContext) as MutableLiveData<HabitModel>
         }
     }
 

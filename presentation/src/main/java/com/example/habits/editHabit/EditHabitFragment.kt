@@ -16,7 +16,7 @@ import com.example.domain.entities.HabitModel
 import com.example.domain.entities.HabitPriority
 import com.example.domain.entities.HabitType
 import com.example.habits.databinding.FragmentEditHabitBinding
-import com.example.habits.editHabit.views.ColorWorker
+import com.example.habits.editHabit.color.ColorWorker
 import com.example.habits.habits.KEY_POSITION
 import com.example.habits.App
 import com.example.habits.utils.HabitsViewModelFactory

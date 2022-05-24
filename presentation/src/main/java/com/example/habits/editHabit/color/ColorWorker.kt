@@ -1,4 +1,4 @@
-package com.example.habits.editHabit.views
+package com.example.habits.editHabit.color
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable

@@ -1,9 +1,9 @@
-package com.example.data
+package com.example.data.network
 
 
-import com.example.data.DTO.HabitDTO
-import com.example.data.DTO.HabitDoneDTO
-import com.example.data.DTO.HabitUidDTO
+import com.example.data.network.DTO.HabitDTO
+import com.example.data.network.DTO.HabitDoneDTO
+import com.example.data.network.DTO.HabitUidDTO
 import retrofit2.http.*
 
 interface HabitAPI {

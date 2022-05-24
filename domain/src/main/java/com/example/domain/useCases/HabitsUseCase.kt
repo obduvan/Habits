@@ -5,16 +5,17 @@ import com.example.domain.ApiResponse
 import com.example.domain.entities.HabitModel
 import com.example.domain.entities.HabitUid
 import com.example.domain.repository.HabitRepository
+import kotlinx.coroutines.flow.Flow
 
 class HabitsUseCase(private val habitRepository: HabitRepository) {
 
-    fun getHabits() = habitRepository.habits
+    fun getHabits() = habitRepository.getHabits()
 
     suspend fun loadHabits(): ApiResponse<Unit> {
         return habitRepository.loadHabits()
     }
 
-     fun getHabit(id: String): LiveData<HabitModel> {
+     fun getHabit(id: String): Flow<HabitModel> {
         return habitRepository.getHabit(id)
     }
 

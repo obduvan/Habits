@@ -1,4 +1,4 @@
-package com.example.data.DTO
+package com.example.data.network.DTO
 
 import com.example.domain.entities.HabitModel
 import com.example.domain.entities.HabitPriority

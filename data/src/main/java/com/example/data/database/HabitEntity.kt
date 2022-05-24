@@ -1,11 +1,10 @@
-package com.example.data.room
+package com.example.data.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.domain.entities.HabitModel
 import com.example.domain.entities.HabitPriority
 import com.example.domain.entities.HabitType
-import java.util.*
 
 @Entity(tableName = "Habits")
 data class HabitEntity(

@@ -1,3 +1,3 @@
-package com.example.data.DTO
+package com.example.data.network.DTO
 
 data class HabitUidDTO(val uid: String)

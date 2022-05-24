@@ -1,21 +1,18 @@
 package com.example.data.repository
 
-import android.graphics.Color
 import android.util.Log
-import androidx.lifecycle.LiveData
-import com.example.data.DTO.HabitDTO
-import com.example.data.DTO.HabitUidDTO
-import com.example.data.NetworkClient
-import com.example.data.retryRequest
-import com.example.data.room.HabitDao
-import com.example.data.room.HabitEntity
+import com.example.data.network.DTO.HabitDTO
+import com.example.data.network.DTO.HabitUidDTO
+import com.example.data.network.NetworkClient
+import com.example.data.network.retryRequest
+import com.example.data.database.HabitDao
+import com.example.data.database.HabitEntity
 import com.example.domain.ApiResponse
 import com.example.domain.entities.HabitModel
-import com.example.domain.entities.HabitPriority
-import com.example.domain.entities.HabitType
 import com.example.domain.entities.HabitUid
-import com.example.domain.map
 import com.example.domain.repository.HabitRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 import retrofit2.HttpException
 import java.io.IOException
@@ -25,7 +22,9 @@ import java.lang.RuntimeException
 class HabitRepositoryImpl(private val habitsDao: HabitDao) :
     HabitRepository {
 
-    override val habits: LiveData<List<HabitModel>> = habitsDao.getAll().map { it.map { entity -> entity.toModel() } }
+    override fun getHabits(): Flow<List<HabitModel>> {
+        return habitsDao.getAll().map { it.map { entity -> entity.toModel() } }
+    }
 
     override suspend fun loadHabits(): ApiResponse<Unit> {
         return try {
@@ -42,8 +41,8 @@ class HabitRepositoryImpl(private val habitsDao: HabitDao) :
         }
     }
 
-    override fun getHabit(id: String): LiveData<HabitModel> =
-        habitsDao.getHabit(id).map { it?.toModel() }
+    override fun getHabit(id: String): Flow<HabitModel> =
+        habitsDao.getHabit(id).map { it.toModel() }
 
     private suspend fun updateLocalDatabase(habit: HabitModel) {
         val existingHabit = habitsDao.checkExistHabit(habit.id)

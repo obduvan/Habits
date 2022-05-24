@@ -3,7 +3,7 @@ package com.example.habits
 import android.app.Application
 import android.content.Context
 import com.example.data.repository.HabitRepositoryImpl
-import com.example.data.room.AppDatabase
+import com.example.data.database.AppDatabase
 import com.example.domain.useCases.HabitsUseCase
 
 

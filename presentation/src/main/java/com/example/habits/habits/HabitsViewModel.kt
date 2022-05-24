@@ -1,9 +1,6 @@
 package com.example.habits.habits
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.domain.ApiResponse
 import com.example.domain.addLiveData
 import com.example.domain.entities.HabitModel
@@ -27,6 +24,7 @@ class HabitsViewModel(private val habitsUseCase: HabitsUseCase) : ViewModel() {
     }
 
     private val habits: LiveData<List<HabitModel>> = habitsUseCase.getHabits()
+        .asLiveData(viewModelScope.coroutineContext)
         .addLiveData(filter)
         .addLiveData(habitComparator)
         .map { (pairLiveData, comparator) ->

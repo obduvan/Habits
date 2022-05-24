@@ -1,4 +1,4 @@
-package com.example.data
+package com.example.data.network
 
 import android.util.Log
 import kotlinx.coroutines.delay
