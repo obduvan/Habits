@@ -7,22 +7,25 @@ import com.example.data.network.NetworkClient
 import com.example.data.network.retryRequest
 import com.example.data.database.HabitDao
 import com.example.data.database.HabitEntity
-import com.example.domain.ApiResponse
+import com.example.data.network.DTO.HabitDTO.Companion.fromHabitModel
+import com.example.data.network.DTO.HabitDoneDTO
+import com.example.domain.api.ApiResponse
 import com.example.domain.entities.HabitModel
 import com.example.domain.entities.HabitUid
 import com.example.domain.repository.HabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 
 import retrofit2.HttpException
 import java.io.IOException
 import java.lang.RuntimeException
 
 
-class HabitRepositoryImpl(private val habitsDao: HabitDao) :
-    HabitRepository {
+class HabitRepositoryImpl(private val habitsDao: HabitDao) : HabitRepository {
 
     override fun getHabits(): Flow<List<HabitModel>> {
+
         return habitsDao.getAll().map { it.map { entity -> entity.toModel() } }
     }
 
@@ -41,8 +44,11 @@ class HabitRepositoryImpl(private val habitsDao: HabitDao) :
         }
     }
 
-    override fun getHabit(id: String): Flow<HabitModel> =
-        habitsDao.getHabit(id).map { it.toModel() }
+    override fun getHabit(id: String): Flow<HabitModel> {
+        return habitsDao.getHabit(id).map {
+            it.toModel()
+        }
+    }
 
     private suspend fun updateLocalDatabase(habit: HabitModel) {
         val existingHabit = habitsDao.checkExistHabit(habit.id)
@@ -59,8 +65,20 @@ class HabitRepositoryImpl(private val habitsDao: HabitDao) :
 
     override suspend fun deleteHabit(habit: HabitModel): ApiResponse<Unit> {
         return try {
-            retryRequest { NetworkClient.habitAPI.deleteHabit(HabitUidDTO(habit.id)) }
+            NetworkClient.habitAPI.deleteHabit(HabitUidDTO(habit.id))
             habitsDao.delete(HabitEntity.fromModel(habit))
+            ApiResponse.Success(data = Unit)
+        } catch (e: RuntimeException) {
+            handleErrors(e)
+        }
+    }
+
+    override suspend fun doneHabit(habit: HabitModel, doneDate: Int): ApiResponse<Unit> {
+        return try {
+            NetworkClient.habitAPI.doneHabit(HabitDoneDTO.fromHabitModel(habit, doneDate))
+
+            habitsDao.update(HabitEntity.fromModel(habit))
+
             ApiResponse.Success(data = Unit)
         } catch (e: RuntimeException) {
             handleErrors(e)
@@ -70,7 +88,7 @@ class HabitRepositoryImpl(private val habitsDao: HabitDao) :
     override suspend fun saveHabit(habit: HabitModel, isNewHabit: Boolean): ApiResponse<HabitUid> {
         return try {
             val response =
-                retryRequest { NetworkClient.habitAPI.saveHabit(HabitDTO.fromHabitModel(habit)) }
+                NetworkClient.habitAPI.saveHabit(HabitDTO.fromHabitModel(habit))
 
             val apiResponse = ApiResponse.Success(HabitUid(response.uid))
 
@@ -84,9 +102,19 @@ class HabitRepositoryImpl(private val habitsDao: HabitDao) :
 
     private fun <T> handleErrors(e: RuntimeException): ApiResponse<T> {
         return when (e) {
-            is HttpException -> ApiResponse.Error(e)
-            is IOException -> ApiResponse.Error(e)
-            else -> ApiResponse.Error(e)
+            is HttpException -> {
+                Log.e("dad1", "da", e)
+                ApiResponse.Error(e)
+            }
+            is IOException -> {
+                Log.e("dad2", "da", e)
+
+                ApiResponse.Error(e)
+            }
+            else -> {
+                Log.e("dad3", "da", e)
+                ApiResponse.Error(e)
+            }
         }
     }
 

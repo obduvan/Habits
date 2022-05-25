@@ -3,10 +3,11 @@
     <string name="habit_name">Habit</string>
     <string name="habit_description">Description</string>
     <string name="repeats">Number of repeats</string>
-    <string name="habit_interval">Interval in days between executions</string>
+    <string name="habit_interval">Interval in hours between executions</string>
     <string name="priority">Priority</string>
     <string name="habit_type">Type</string>
     <string name="day">&#160;day</string>
+    <string name="hour">&#160;hour</string>
 
     <string name="low_priority">Low</string>
     <string name="medium_priority">Medium</string>
@@ -17,6 +18,7 @@
     <string name="habit_type_bad">Bad</string>
     <string name="save">Save</string>
     <string name="days">&#160;days</string>
+    <string name="hours">&#160;hours</string>
     <string name="create_new_habit">Create new habit</string>
     <string name="interval">Interval:&#160;</string>
     <string name="close_drawer">close</string>
@@ -29,7 +31,7 @@
 
     <string name="error_empty_habit">Habit is empty</string>
     <string name="error_repeats_incorrect">Number of repeats must be greater than zero</string>
-    <string name="error_interval">Frequency must be greater than zero</string>
+    <string name="error_interval">Interval must be greater than zero</string>
 
     <string-array name="priorities">
         <item>Low</item>
@@ -40,5 +42,7 @@
     <string name="database_name">"habits_database"</string>
     <string name="avatar">avatar</string>
     <string name="delete">Delete</string>
+    <string name="done">Done</string>
+    <string name="repeats_divider">/</string>
 
 </resources>

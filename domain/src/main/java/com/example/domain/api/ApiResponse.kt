@@ -1,4 +1,4 @@
-package com.example.domain
+package com.example.domain.api
 
 sealed class ApiResponse<T>(
     data: T? = null,

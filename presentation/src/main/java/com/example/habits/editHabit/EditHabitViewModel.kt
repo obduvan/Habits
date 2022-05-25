@@ -2,12 +2,11 @@ package com.example.habits.editHabit
 
 import androidx.lifecycle.*
 import com.example.habits.R
-import com.example.domain.ApiResponse
+import com.example.domain.api.ApiResponse
 import com.example.domain.entities.HabitModel
 import com.example.domain.useCases.HabitsUseCase
 import com.example.habits.App
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -47,7 +46,7 @@ class EditHabitViewModel(private val habitsUseCase: HabitsUseCase) : ViewModel()
                 navigator?.popBackStack()
             }
             if (response is ApiResponse.Error) {
-                showingMessage?.showMessage("Can't connect to server.")
+                showingMessage?.showMessage("Can't connect to server edit.")
             }
         }
     }
@@ -105,7 +104,7 @@ class EditHabitViewModel(private val habitsUseCase: HabitsUseCase) : ViewModel()
 
     fun deleteHabit(habitModel: HabitModel) {
         viewModelScope.launch {
-            val apiResponse = habitsUseCase.deleteHabit(habitModel)
+            val apiResponse = withContext(Dispatchers.IO) { habitsUseCase.deleteHabit(habitModel) }
 
             if (apiResponse is ApiResponse.Error) {
                 showingMessage?.showMessage("Server error")

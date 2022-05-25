@@ -1,3 +1,7 @@
 package com.example.data.network.DTO
 
-data class HabitUidDTO(val uid: String)
+import com.google.gson.annotations.SerializedName
+
+data class HabitUidDTO(
+    @SerializedName("uid")
+    val uid: String)

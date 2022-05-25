@@ -10,16 +10,24 @@ import com.example.domain.entities.HabitModel
 import com.example.domain.entities.HabitPriority
 import com.example.domain.entities.HabitType
 import com.example.habits.R
-import com.example.habits.ResourceUtils.Companion.getResourcePriority
-import com.example.habits.ResourceUtils.Companion.getResourceType
+import com.example.habits.utils.ResourceUtils.Companion.getResourcePriority
+import com.example.habits.utils.ResourceUtils.Companion.getResourceType
 import com.example.habits.databinding.WidgetHabitItemBinding
+import com.example.domain.getSecondsTime
 
 
 interface OnHabitListener {
-    fun onHabitClick(position: String)
+    fun onHabitClick(id: String)
 }
 
-class HabitAdapter(private val onHabitListener: OnHabitListener) :
+interface OnDoneListener {
+    fun onDoneClick(id: String, time: Int)
+}
+
+class HabitAdapter(
+    private val onHabitListener: OnHabitListener,
+    private val onDoneListener: OnDoneListener
+) :
     ListAdapter<HabitModel, HabitAdapter.ViewHolder>(
         AsyncDifferConfig.Builder(HabitDiffCallBack()).build()
     ) {
@@ -27,7 +35,7 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val habitBinding =
             WidgetHabitItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(habitBinding, onHabitListener)
+        return ViewHolder(habitBinding, onHabitListener, onDoneListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -35,11 +43,9 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
     }
 
     class ViewHolder(
-        private val binding: WidgetHabitItemBinding, private val onHabitListener: OnHabitListener
+        private val binding: WidgetHabitItemBinding, private val onHabitListener: OnHabitListener,
+        private val onDoneListener: OnDoneListener,
     ) : RecyclerView.ViewHolder(binding.root) {
-
-
-
 
         fun bind(habitModel: HabitModel) {
 
@@ -50,6 +56,8 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
                 binding.habitPriority.text = itemView.context.getText(getResourcePriority(priority))
                 binding.habitTextType.text = itemView.context.getString(getResourceType(type))
                 binding.interval.text = interval.toString()
+                binding.repeatsCount.text = countRepeats.toString()
+                binding.repeats.text = doneDates.count().toString()
 
                 val colorPriority = when (priority) {
                     HabitPriority.HIGH -> itemView.context.getColor(R.color.bittersweet)
@@ -60,7 +68,7 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
 
 
                 if (interval == 1) {
-                    binding.days.text = itemView.context.getString(R.string.day)
+                    binding.hours.text = itemView.context.getString(R.string.hour)
                 }
 
                 if (type == HabitType.GOOD) {
@@ -69,6 +77,12 @@ class HabitAdapter(private val onHabitListener: OnHabitListener) :
                     binding.cardType.setCardBackgroundColor(itemView.context.getColor(R.color.pink_cavern))
                 }
 
+                binding.doneButton.setOnClickListener {
+                    onDoneListener.onDoneClick(
+                        id,
+                        time = getSecondsTime()
+                    )
+                }
                 itemView.setOnClickListener { onHabitListener.onHabitClick(id) }
             }
         }

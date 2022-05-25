@@ -1,6 +1,7 @@
 package com.example.habits.habits
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,7 @@ import com.example.habits.utils.HabitsViewModelFactory
 const val KEY_POSITION = "POSITION"
 
 
-class HabitsFragment : Fragment(), OnHabitListener {
+class HabitsFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapterHabit: HabitAdapter
 
@@ -42,6 +43,22 @@ class HabitsFragment : Fragment(), OnHabitListener {
         }
     }
 
+    private val onDoneListener = object : OnDoneListener {
+        override fun onDoneClick(id: String, time: Int) {
+            viewModel.doneHabit(id, time)
+        }
+    }
+
+    private val onHabitClick = object : OnHabitListener {
+        override fun onHabitClick(id: String) {
+            findNavController().navigate(
+                R.id.action_navigation_habits_to_navigation_edit_habit,
+                bundleOf(KEY_POSITION to id)
+            )
+        }
+    }
+
+
     companion object {
         private const val KEY_TYPE_HABITS = "TYPE"
 
@@ -59,11 +76,11 @@ class HabitsFragment : Fragment(), OnHabitListener {
     ): View {
         val type = arguments?.get(KEY_TYPE_HABITS) as? HabitType
         habitType = type
-
+        val app = (requireActivity().application as App)
         type?.let {
             viewModel = ViewModelProvider(
                 requireActivity(),
-                HabitsViewModelFactory((requireActivity().application as App).habitsUseCase)
+                HabitsViewModelFactory(app.habitsUseCase, app.doneHabitUseCase)
             )[type.name, HabitsViewModel::class.java]
         }
         viewModel.loadHabits()
@@ -75,7 +92,7 @@ class HabitsFragment : Fragment(), OnHabitListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapterHabit = HabitAdapter(this)
+        adapterHabit = HabitAdapter(onHabitClick, onDoneListener)
 
         recyclerView = binding.habitsRecycler
         recyclerView.setHasFixedSize(true)
@@ -93,12 +110,6 @@ class HabitsFragment : Fragment(), OnHabitListener {
         }
     }
 
-    override fun onHabitClick(position: String) {
-        findNavController().navigate(
-            R.id.action_navigation_habits_to_navigation_edit_habit,
-            bundleOf(KEY_POSITION to position)
-        )
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

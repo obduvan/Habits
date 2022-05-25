@@ -4,14 +4,20 @@ import android.app.Application
 import android.content.Context
 import com.example.data.repository.HabitRepositoryImpl
 import com.example.data.database.AppDatabase
+import com.example.domain.useCases.DoneHabitUseCase
 import com.example.domain.useCases.HabitsUseCase
 
 
 class App : Application() {
 
-    val database by lazy {  AppDatabase.getDatabase(this)}
+    val database by lazy { AppDatabase.getDatabase(this) }
     val habitsUseCase: HabitsUseCase by lazy {
         HabitsUseCase(
+            HabitRepositoryImpl(database.habitDao())
+        )
+    }
+    val doneHabitUseCase: DoneHabitUseCase by lazy {
+        DoneHabitUseCase(
             HabitRepositoryImpl(database.habitDao())
         )
     }

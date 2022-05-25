@@ -1,7 +1,8 @@
-package com.example.habits
+package com.example.habits.utils
 
 import com.example.domain.entities.HabitPriority
 import com.example.domain.entities.HabitType
+import com.example.habits.R
 
 class ResourceUtils {
     companion object {

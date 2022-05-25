@@ -48,15 +48,15 @@ class BottomSheetFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val app = (requireActivity().application as App)
         viewModelGood = ViewModelProvider(
             requireActivity(),
-            HabitsViewModelFactory((requireActivity().application as App).habitsUseCase)
+            HabitsViewModelFactory(app.habitsUseCase, app.doneHabitUseCase)
         )[HabitType.GOOD.name, HabitsViewModel::class.java]
 
         viewModelBad = ViewModelProvider(
             requireActivity(),
-            HabitsViewModelFactory((requireActivity().application as App).habitsUseCase)
+            HabitsViewModelFactory(app.habitsUseCase, app.doneHabitUseCase)
         )[HabitType.BAD.name, HabitsViewModel::class.java]
     }
 

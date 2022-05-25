@@ -1,7 +1,7 @@
-package com.example.habits.utils
+package com.example.domain
 
 import java.util.*
 
-fun getIntTime(): Int {
+fun getSecondsTime(): Int {
     return (Date().time / 1000).toInt()
 }

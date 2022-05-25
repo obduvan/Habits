@@ -3,7 +3,7 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="92dp"
+    android:layout_height="137dp"
     android:layout_marginHorizontal="6dp"
     android:layout_marginTop="2dp"
     android:elevation="0dp"
@@ -17,7 +17,7 @@
         <View
             android:id="@+id/color"
             android:layout_width="9dp"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,23 +72,63 @@
             app:layout_constraintTop_toBottomOf="@id/habit_description" />
 
         <TextView
-            android:id="@+id/days"
+            android:id="@+id/hours"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/days"
+            android:text="@string/hours"
             android:textColor="@color/dusty_grey"
             android:textSize="14sp"
             app:layout_constraintStart_toEndOf="@id/interval"
             app:layout_constraintTop_toBottomOf="@id/habit_description" />
 
+        <!--        <TextView-->
+        <!--            android:id="@+id/repeats_name"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="30dp"-->
+        <!--            android:text="Repeats: "-->
+        <!--            android:textColor="@color/dusty_grey"-->
+        <!--            android:textSize="14sp"-->
+        <!--            app:layout_constraintStart_toEndOf="@id/hours"-->
+        <!--            app:layout_constraintTop_toTopOf="@id/hours" />-->
+
+        <TextView
+            android:id="@+id/repeats"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dusty_grey"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/repeats_divider"
+            app:layout_constraintTop_toTopOf="@id/interval_name" />
+
+
+        <TextView
+            android:id="@+id/repeats_divider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/repeats_divider"
+            android:textColor="@color/dusty_grey"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/repeats_count"
+            app:layout_constraintTop_toTopOf="@id/interval_name" />
+
+        <TextView
+            android:id="@+id/repeats_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/dusty_grey"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@id/card_type"
+            app:layout_constraintTop_toTopOf="@id/interval_name" />
 
         <TextView
             android:id="@+id/habit_priority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@id/card_type"
             app:layout_constraintEnd_toEndOf="@id/card_type"
+            app:layout_constraintStart_toStartOf="@id/card_type"
             app:layout_constraintTop_toTopOf="@id/habit_description" />
 
         <com.google.android.material.card.MaterialCardView
@@ -103,7 +143,7 @@
             <TextView
                 android:id="@+id/habit_text_type"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="2dp"
                 android:textSize="14sp" />
@@ -116,6 +156,19 @@
             android:layout_height="0.1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/done_button"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:text="@string/done"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/card_type"
+            app:layout_constraintStart_toStartOf="@id/interval_name">
+
+        </com.google.android.material.button.MaterialButton>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

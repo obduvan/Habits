@@ -20,7 +20,7 @@ import com.example.habits.editHabit.color.ColorWorker
 import com.example.habits.habits.KEY_POSITION
 import com.example.habits.App
 import com.example.habits.utils.HabitsViewModelFactory
-import com.example.habits.utils.getIntTime
+import com.example.domain.getSecondsTime
 
 
 interface ShowingMessage {
@@ -41,11 +41,17 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
 
     private var colorWorker: ColorWorker? = null
     private var idHabit: String = ""
+    private var doneDates = listOf<Int>()
 
     private val isNewHabit: Boolean
         get() = idHabit == ""
 
-    private val viewModel: EditHabitViewModel by viewModels { HabitsViewModelFactory((requireActivity().application as App).habitsUseCase) }
+    private val viewModel: EditHabitViewModel by viewModels {
+        HabitsViewModelFactory(
+            (requireActivity().application as App).habitsUseCase,
+            (requireActivity().application as App).doneHabitUseCase
+        )
+    }
 
 //    private var viewModel: EditHabitViewModel? = null
 
@@ -113,6 +119,7 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
                 (b.types.getChildAt(type.ordinal) as RadioButton).isChecked = true
                 (b.types.getChildAt((type.ordinal + 1) % HabitType.values().size) as RadioButton).isChecked =
                     false
+                doneDates = habit.doneDates
             }
         }
     }
@@ -135,13 +142,14 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
             name = binding.name.text.toString(),
             description = binding.description.text.toString(),
             color = colorWorker?.getSelectedColor() ?: Color.WHITE,
+            date = getSecondsTime(),
             countRepeats = binding.countRepeats.text.toString().toIntOrNull() ?: 0,
             interval = binding.interval.text.toString().toIntOrNull() ?: 0,
+            type = getSelectedType(),
             priority = HabitPriority.valueOf(
                 binding.prioritySpinner.selectedItem.toString().uppercase()
             ),
-            type = getSelectedType(),
-            date = getIntTime()
+            doneDates = doneDates,
         )
     }
 
@@ -153,7 +161,7 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
         }
     }
 
-    private fun getSelectedType():HabitType {
+    private fun getSelectedType(): HabitType {
         return when (binding.types.checkedRadioButtonId) {
             R.id.good_type -> HabitType.GOOD
             else -> HabitType.BAD

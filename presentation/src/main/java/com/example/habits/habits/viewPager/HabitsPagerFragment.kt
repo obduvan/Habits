@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.domain.entities.HabitType
 import com.example.habits.R
-import com.example.habits.ResourceUtils.Companion.getResourceType
+import com.example.habits.utils.ResourceUtils.Companion.getResourceType
 import com.example.habits.databinding.FragmentPagerHabitsBinding
 import com.google.android.material.tabs.TabLayoutMediator
 

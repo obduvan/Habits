@@ -17,6 +17,7 @@ object NetworkClient {
 
         val client = OkHttpClient()
             .newBuilder()
+//            .retryOnConnectionFailure(false)
             .addInterceptor(AuthInterceptor())
             .addInterceptor(logInterceptor)
             .build()

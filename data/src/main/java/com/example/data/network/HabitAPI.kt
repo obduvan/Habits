@@ -18,5 +18,5 @@ interface HabitAPI {
     suspend fun deleteHabit(@Body habitUidDTO: HabitUidDTO)
 
     @POST("habit_done")
-    suspend fun completeHabit(@Body habitDoneDTO: HabitDoneDTO)
+    suspend fun doneHabit(@Body habitDoneDTO: HabitDoneDTO)
 }

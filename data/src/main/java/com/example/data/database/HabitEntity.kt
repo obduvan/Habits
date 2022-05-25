@@ -2,11 +2,14 @@ package com.example.data.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import androidx.room.TypeConverters
+import com.example.data.database.typeConverter.HabitTypeConverter
 import com.example.domain.entities.HabitModel
 import com.example.domain.entities.HabitPriority
 import com.example.domain.entities.HabitType
 
 @Entity(tableName = "Habits")
+@TypeConverters(HabitTypeConverter::class)
 data class HabitEntity(
     @PrimaryKey
     var id: String,
@@ -18,6 +21,7 @@ data class HabitEntity(
     var date: Int,
     var type: HabitType,
     var priority: HabitPriority,
+    var doneDates: List<Int>
 ) {
 
     companion object {
@@ -30,7 +34,8 @@ data class HabitEntity(
             countRepeats = model.countRepeats,
             interval = model.interval,
             type = model.type,
-            priority = model.priority
+            priority = model.priority,
+            doneDates = model.doneDates
         )
     }
 
@@ -39,11 +44,12 @@ data class HabitEntity(
         name = name,
         description = description,
         color = color,
+        date = date,
         countRepeats = countRepeats,
         interval = interval,
         type = type,
         priority = priority,
-        date = date
+        doneDates = doneDates
     )
 }
 
