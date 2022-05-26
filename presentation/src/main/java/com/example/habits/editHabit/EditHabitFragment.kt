@@ -1,6 +1,7 @@
 package com.example.habits.editHabit
 
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -21,6 +22,8 @@ import com.example.habits.habits.KEY_POSITION
 import com.example.habits.App
 import com.example.habits.utils.HabitsViewModelFactory
 import com.example.domain.getSecondsTime
+import com.example.habits.utils.HabitsViewModelFactory_Factory
+import javax.inject.Inject
 
 
 interface ShowingMessage {
@@ -50,14 +53,25 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
     private val isNewHabit: Boolean
         get() = idHabit == ""
 
-    private val viewModel: EditHabitViewModel by viewModels {
-        HabitsViewModelFactory(
-            (requireActivity().application as App).appComponent.getHabitUseCase(),
-            (requireActivity().application as App).appComponent.getDoneHabitUseCase()
-        )
-    }
+    @Inject
+    lateinit var viewModelFactory: HabitsViewModelFactory.Factory
+
+    private val viewModel: EditHabitViewModel by viewModels { viewModelFactory.create() }
+
+//    private val viewModel: EditHabitViewModel by viewModels {
+//        HabitsViewModelFactory(
+//            (requireActivity().application as App).appComponent.getHabitUseCase(),
+//            (requireActivity().application as App).appComponent.getDoneHabitUseCase()
+//        )
+//    }
 
 //    private var viewModel: EditHabitViewModel? = null
+
+    override fun onAttach(context: Context) {
+        (requireActivity().application as App).appComponent.editHabitComponent().build()
+            .inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

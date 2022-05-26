@@ -7,8 +7,11 @@ import com.example.domain.useCases.HabitsUseCase
 
 import com.example.habits.editHabit.EditHabitViewModel
 import com.example.habits.habits.HabitsViewModel
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 
-class HabitsViewModelFactory(
+class HabitsViewModelFactory @AssistedInject constructor(
     private val habitsUseCase: HabitsUseCase,
     private val doneHabitUseCase: DoneHabitUseCase
 ) : ViewModelProvider.Factory {
@@ -25,5 +28,10 @@ class HabitsViewModelFactory(
         }
 
         return viewModel as T
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(): HabitsViewModelFactory
     }
 }

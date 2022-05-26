@@ -1,5 +1,6 @@
 package com.example.habits.editHabit
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.habits.R
 import com.example.domain.api.ApiResponse
@@ -16,7 +17,6 @@ class ValidationResult(
 )
 
 class EditHabitViewModel(private val habitsUseCase: HabitsUseCase) : ViewModel() {
-
     private var _habit = MutableLiveData<HabitModel>()
         set(value) {
             field = value
@@ -46,7 +46,7 @@ class EditHabitViewModel(private val habitsUseCase: HabitsUseCase) : ViewModel()
                 navigator?.popBackStack()
             }
             if (response is ApiResponse.Error) {
-                showingMessage?.showMessage("Can't connect to server edit.")
+                showingMessage?.showMessage(SERVER_ERROR_TEXT)
             }
         }
     }
@@ -107,7 +107,7 @@ class EditHabitViewModel(private val habitsUseCase: HabitsUseCase) : ViewModel()
             val apiResponse = withContext(Dispatchers.IO) { habitsUseCase.deleteHabit(habitModel) }
 
             if (apiResponse is ApiResponse.Error) {
-                showingMessage?.showMessage("Server error")
+                showingMessage?.showMessage(SERVER_ERROR_TEXT)
             }
             if (apiResponse is ApiResponse.Success) {
                 navigator?.popBackStack()
@@ -115,4 +115,9 @@ class EditHabitViewModel(private val habitsUseCase: HabitsUseCase) : ViewModel()
         }
 
     }
+
+    companion object {
+        private const val SERVER_ERROR_TEXT = "Server error"
+    }
+
 }

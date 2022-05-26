@@ -1,5 +1,6 @@
 package com.example.habits.habits
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -37,6 +38,16 @@ class HabitsFragment : Fragment() {
             "Binding is only valid between onCreateView and onDestroyView."
         )
 
+    companion object {
+        private const val KEY_TYPE_HABITS = "TYPE"
+
+        fun newInstance(type: HabitType): HabitsFragment {
+            val fragment = HabitsFragment()
+            fragment.arguments = bundleOf(KEY_TYPE_HABITS to type)
+            return fragment
+        }
+    }
+
     private val showingMessage = object : ShowingMessage {
         override fun showMessage(message: String) {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -55,17 +66,6 @@ class HabitsFragment : Fragment() {
                 R.id.action_navigation_habits_to_navigation_edit_habit,
                 bundleOf(KEY_POSITION to id)
             )
-        }
-    }
-
-
-    companion object {
-        private const val KEY_TYPE_HABITS = "TYPE"
-
-        fun newInstance(type: HabitType): HabitsFragment {
-            val fragment = HabitsFragment()
-            fragment.arguments = bundleOf(KEY_TYPE_HABITS to type)
-            return fragment
         }
     }
 
@@ -88,7 +88,6 @@ class HabitsFragment : Fragment() {
             )[type.name, HabitsViewModel::class.java]
         }
         viewModel.loadHabits()
-
 
         _binding = FragmentHabitsBinding.inflate(inflater, container, false)
         return binding.root
@@ -113,7 +112,6 @@ class HabitsFragment : Fragment() {
             }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

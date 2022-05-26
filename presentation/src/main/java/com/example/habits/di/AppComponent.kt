@@ -9,17 +9,21 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [DataModule::class])
+@Component(modules = [AppModule::class, DataModule::class])
 interface AppComponent {
 
     @Component.Builder
-    interface Builder{
+    interface Builder {
 
         @BindsInstance
         fun context(context: Context): Builder
 
         fun build(): AppComponent
     }
+
+    fun habitsComponent(): HabitsComponent.Builder
+
+    fun editHabitComponent(): EditHabitComponent.Builder
 
     fun getHabitUseCase(): HabitsUseCase
 
