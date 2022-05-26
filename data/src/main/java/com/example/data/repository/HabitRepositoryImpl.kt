@@ -7,7 +7,6 @@ import com.example.data.network.NetworkClient
 import com.example.data.network.retryRequest
 import com.example.data.database.HabitDao
 import com.example.data.database.HabitEntity
-import com.example.data.network.DTO.HabitDTO.Companion.fromHabitModel
 import com.example.data.network.DTO.HabitDoneDTO
 import com.example.domain.api.ApiResponse
 import com.example.domain.entities.HabitModel
@@ -15,17 +14,16 @@ import com.example.domain.entities.HabitUid
 import com.example.domain.repository.HabitRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 
 import retrofit2.HttpException
 import java.io.IOException
 import java.lang.RuntimeException
+import javax.inject.Inject
 
 
-class HabitRepositoryImpl(private val habitsDao: HabitDao) : HabitRepository {
+class HabitRepositoryImpl @Inject constructor(private val habitsDao: HabitDao) : HabitRepository {
 
     override fun getHabits(): Flow<List<HabitModel>> {
-
         return habitsDao.getAll().map { it.map { entity -> entity.toModel() } }
     }
 
@@ -103,16 +101,16 @@ class HabitRepositoryImpl(private val habitsDao: HabitDao) : HabitRepository {
     private fun <T> handleErrors(e: RuntimeException): ApiResponse<T> {
         return when (e) {
             is HttpException -> {
-                Log.e("dad1", "da", e)
+//                Log.e("dad1", "da", e)
                 ApiResponse.Error(e)
             }
             is IOException -> {
-                Log.e("dad2", "da", e)
+//                Log.e("dad2", "da", e)
 
                 ApiResponse.Error(e)
             }
             else -> {
-                Log.e("dad3", "da", e)
+//                Log.e("dad3", "da", e)
                 ApiResponse.Error(e)
             }
         }

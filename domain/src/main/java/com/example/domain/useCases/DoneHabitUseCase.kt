@@ -8,16 +8,15 @@ import com.example.domain.entities.HabitType
 import com.example.domain.getSecondsTime
 import com.example.domain.repository.HabitRepository
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class DoneHabitUseCase(private val habitRepository: HabitRepository) {
+class DoneHabitUseCase @Inject constructor(private val habitRepository: HabitRepository) {
 
     suspend fun doneHabit(id: String, doneTimeSeconds: Int): ApiResponse<DoneMessage> {
-        var message: String? = null
-        var habitMustBeUpdated = true
-
-
         val habit = habitRepository.getHabit(id).first()
 
+        var message: String? = null
+        var habitMustBeUpdated = true
         val lastDoneTaskTime: Int? = habit.doneDates.lastOrNull()
 
         if (lastDoneTaskTime != null) {
@@ -55,7 +54,6 @@ class DoneHabitUseCase(private val habitRepository: HabitRepository) {
         }
 
         if (habitMustBeUpdated) {
-            Log.e("update", "обнови")
             updateDoneHabit(doneTimeSeconds, habit)
         }
         return ApiResponse.Success(DoneMessage(text = message))

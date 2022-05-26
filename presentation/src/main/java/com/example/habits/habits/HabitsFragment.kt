@@ -76,11 +76,15 @@ class HabitsFragment : Fragment() {
     ): View {
         val type = arguments?.get(KEY_TYPE_HABITS) as? HabitType
         habitType = type
-        val app = (requireActivity().application as App)
+        val appComponent = (requireActivity().application as App).appComponent
+
         type?.let {
             viewModel = ViewModelProvider(
                 requireActivity(),
-                HabitsViewModelFactory(app.habitsUseCase, app.doneHabitUseCase)
+                HabitsViewModelFactory(
+                    appComponent.getHabitUseCase(),
+                    appComponent.getDoneHabitUseCase()
+                )
             )[type.name, HabitsViewModel::class.java]
         }
         viewModel.loadHabits()

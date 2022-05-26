@@ -5,8 +5,9 @@ import com.example.domain.entities.HabitModel
 import com.example.domain.entities.HabitUid
 import com.example.domain.repository.HabitRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class HabitsUseCase(private val habitRepository: HabitRepository) {
+class HabitsUseCase @Inject constructor(private val habitRepository: HabitRepository) {
 
     fun getHabits(): Flow<List<HabitModel>> = habitRepository.getHabits()
 

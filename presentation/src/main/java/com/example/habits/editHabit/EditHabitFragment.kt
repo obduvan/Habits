@@ -33,6 +33,10 @@ interface Navigator {
 
 class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
 
+    companion object {
+        private const val ITS_NEW_HABIT_TEXT = "It's new habit."
+    }
+
     private var _binding: FragmentEditHabitBinding? = null
     private val binding
         get() = _binding ?: throw IllegalStateException(
@@ -41,15 +45,15 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
 
     private var colorWorker: ColorWorker? = null
     private var idHabit: String = ""
-    private var doneDates = listOf<Int>()
+    private var doneDatesList = listOf<Int>()
 
     private val isNewHabit: Boolean
         get() = idHabit == ""
 
     private val viewModel: EditHabitViewModel by viewModels {
         HabitsViewModelFactory(
-            (requireActivity().application as App).habitsUseCase,
-            (requireActivity().application as App).doneHabitUseCase
+            (requireActivity().application as App).appComponent.getHabitUseCase(),
+            (requireActivity().application as App).appComponent.getDoneHabitUseCase()
         )
     }
 
@@ -119,7 +123,7 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
                 (b.types.getChildAt(type.ordinal) as RadioButton).isChecked = true
                 (b.types.getChildAt((type.ordinal + 1) % HabitType.values().size) as RadioButton).isChecked =
                     false
-                doneDates = habit.doneDates
+                doneDatesList = doneDates
             }
         }
     }
@@ -130,7 +134,7 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
 
     private fun onDeleteButtonClicked() {
         if (isNewHabit) {
-            showMessage("It's new habit.")
+            showMessage(ITS_NEW_HABIT_TEXT)
         } else {
             viewModel.deleteHabit(getHabitModel())
         }
@@ -149,7 +153,7 @@ class EditHabitFragment : Fragment(), ShowingMessage, Navigator {
             priority = HabitPriority.valueOf(
                 binding.prioritySpinner.selectedItem.toString().uppercase()
             ),
-            doneDates = doneDates,
+            doneDates = doneDatesList,
         )
     }
 

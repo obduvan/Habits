@@ -53,7 +53,6 @@ data class HabitDTO(
     }
 
     fun toHabitModel(): HabitModel {
-
         return HabitModel(
             id = uid,
             name = title,
@@ -64,7 +63,7 @@ data class HabitDTO(
             interval = frequency,
             type = HabitType.createPriority(type),
             priority = HabitPriority.createPriority(priority),
-            doneDates = doneDates ?: listOf()
+            doneDates = doneDates
         )
     }
 }
