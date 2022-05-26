@@ -3,11 +3,11 @@ package com.example.data.repository
 import android.util.Log
 import com.example.data.network.DTO.HabitDTO
 import com.example.data.network.DTO.HabitUidDTO
-import com.example.data.network.NetworkClient
 import com.example.data.network.retryRequest
 import com.example.data.database.HabitDao
 import com.example.data.database.HabitEntity
 import com.example.data.network.DTO.HabitDoneDTO
+import com.example.data.network.HabitAPI
 import com.example.domain.api.ApiResponse
 import com.example.domain.entities.HabitModel
 import com.example.domain.entities.HabitUid
@@ -21,7 +21,10 @@ import java.lang.RuntimeException
 import javax.inject.Inject
 
 
-class HabitRepositoryImpl @Inject constructor(private val habitsDao: HabitDao) : HabitRepository {
+class HabitRepositoryImpl @Inject constructor(
+    private val habitsDao: HabitDao,
+    private val habitAPI: HabitAPI,
+) : HabitRepository {
 
     override fun getHabits(): Flow<List<HabitModel>> {
         return habitsDao.getAll().map { it.map { entity -> entity.toModel() } }
@@ -29,7 +32,7 @@ class HabitRepositoryImpl @Inject constructor(private val habitsDao: HabitDao) :
 
     override suspend fun loadHabits(): ApiResponse<Unit> {
         return try {
-            val response = retryRequest { NetworkClient.habitAPI.getHabits() }
+            val response = retryRequest { habitAPI.getHabits() }
             Log.i(HabitRepositoryImpl::class.java.name, response.toString())
 
             response.forEach {
@@ -63,7 +66,7 @@ class HabitRepositoryImpl @Inject constructor(private val habitsDao: HabitDao) :
 
     override suspend fun deleteHabit(habit: HabitModel): ApiResponse<Unit> {
         return try {
-            NetworkClient.habitAPI.deleteHabit(HabitUidDTO(habit.id))
+            habitAPI.deleteHabit(HabitUidDTO(habit.id))
             habitsDao.delete(HabitEntity.fromModel(habit))
             ApiResponse.Success(data = Unit)
         } catch (e: RuntimeException) {
@@ -73,7 +76,7 @@ class HabitRepositoryImpl @Inject constructor(private val habitsDao: HabitDao) :
 
     override suspend fun doneHabit(habit: HabitModel, doneDate: Int): ApiResponse<Unit> {
         return try {
-            NetworkClient.habitAPI.doneHabit(HabitDoneDTO.fromHabitModel(habit, doneDate))
+            habitAPI.doneHabit(HabitDoneDTO.fromHabitModel(habit, doneDate))
 
             habitsDao.update(HabitEntity.fromModel(habit))
 
@@ -86,7 +89,7 @@ class HabitRepositoryImpl @Inject constructor(private val habitsDao: HabitDao) :
     override suspend fun saveHabit(habit: HabitModel, isNewHabit: Boolean): ApiResponse<HabitUid> {
         return try {
             val response =
-                NetworkClient.habitAPI.saveHabit(HabitDTO.fromHabitModel(habit))
+                habitAPI.saveHabit(HabitDTO.fromHabitModel(habit))
 
             val apiResponse = ApiResponse.Success(HabitUid(response.uid))
 

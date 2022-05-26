@@ -69,8 +69,8 @@ class DoneHabitUseCase @Inject constructor(private val habitRepository: HabitRep
         private const val COMPLETE_TEXT = "Вы завершили привычку!"
         private const val DONE_TEXT = "Сделано!"
         private const val RETRY_DO_TEXT = "Данная привычка завершена."
-        private const val GOOD_STOP_TEXT =  "You are breathtaking!"
-        private const val BAD_STOP_TEXT ="Хватит это делать"
+        private const val GOOD_STOP_TEXT = "You are breathtaking!"
+        private const val BAD_STOP_TEXT = "Хватит это делать"
         private const val MAY_DO_TEXT = "Можете выполнить еще %d раз"
     }
 }
