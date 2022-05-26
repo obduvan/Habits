@@ -23,9 +23,12 @@ class DatabaseModule {
         return Room.databaseBuilder(
             context.applicationContext,
             AppDatabase::class.java,
-            "habits_database",
+            SERVER_NAME,
         ).allowMainThreadQueries()
             .fallbackToDestructiveMigration()
             .build()
+    }
+    companion object {
+        private const val SERVER_NAME = "habits_database"
     }
 }

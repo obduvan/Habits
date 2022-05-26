@@ -15,7 +15,7 @@ class HabitsUseCase @Inject constructor(private val habitRepository: HabitReposi
         return habitRepository.loadHabits()
     }
 
-    fun getHabit(id: String): Flow<HabitModel?> {
+    fun getHabit(id: String): Flow<HabitModel> {
         return habitRepository.getHabit(id)
     }
 
