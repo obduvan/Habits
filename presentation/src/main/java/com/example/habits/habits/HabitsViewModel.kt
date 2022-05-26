@@ -48,7 +48,7 @@ class HabitsViewModel(
             val apiResponse = habitsUseCase.loadHabits()
             withContext(Dispatchers.Main) {
                 if (apiResponse is ApiResponse.Error) {
-                    showingMessage?.showMessage("Can't connect to server2.")
+                    showingMessage?.showMessage(SERVER_ERROR_TEXT)
 
                 }
             }
@@ -62,7 +62,7 @@ class HabitsViewModel(
 
             withContext(Dispatchers.Main) {
                 if (apiResponse is ApiResponse.Error) {
-                    showingMessage?.showMessage("Can't connect to serve1r.")
+                    showingMessage?.showMessage(SERVER_ERROR_TEXT)
                 }
                 if (apiResponse is ApiResponse.Success) {
                     apiResponse.data.text?.let {
@@ -88,5 +88,9 @@ class HabitsViewModel(
 
     fun onDestroyView() {
         showingMessage = null
+    }
+
+    companion object{
+        private const val SERVER_ERROR_TEXT = "Server error"
     }
 }

@@ -104,16 +104,12 @@ class HabitRepositoryImpl @Inject constructor(
     private fun <T> handleErrors(e: RuntimeException): ApiResponse<T> {
         return when (e) {
             is HttpException -> {
-//                Log.e("dad1", "da", e)
                 ApiResponse.Error(e)
             }
             is IOException -> {
-//                Log.e("dad2", "da", e)
-
                 ApiResponse.Error(e)
             }
             else -> {
-//                Log.e("dad3", "da", e)
                 ApiResponse.Error(e)
             }
         }
